@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-primary to-[#0f172a] border-t border-foreground/5 pt-20 pb-10 relative overflow-hidden">
+    <footer className="bg-gradient-to-b from-primary to-white dark:from-primary dark:to-[#0f172a] border-t border-foreground/5 pt-20 pb-10 relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-neon/5 rounded-full blur-[80px] pointer-events-none" />
@@ -54,7 +54,7 @@ export const Footer: React.FC = () => {
                 <a
                   key={i}
                   href="#"
-                  className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-muted hover:text-white hover:bg-accent hover:border-accent transition-all duration-300 group"
+                  className="w-10 h-10 rounded-lg bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted hover:text-white hover:bg-accent hover:border-accent transition-all duration-300 group"
                 >
                   <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </a>

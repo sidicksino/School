@@ -1,3 +1,8 @@
+import img1 from '../assets/1.png';
+import img2 from '../assets/2.png';
+import img3 from '../assets/3.png';
+import img4 from '../assets/4.png';
+
 export type Language = 'en' | 'fr';
 
 export const translations = {
@@ -19,22 +24,28 @@ export const translations = {
       cta_secondary: 'Visit School',
       slides: [
         {
-          image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop',
+          image: img1,
           title_line1: 'Nurturing the',
           title_highlight: 'Leaders of Chad',
           subtitle: "Académie Royale offers a world-class bilingual education in N'Djamena, blending academic excellence with Chadian values.",
         },
         {
-          image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=2000&auto=format&fit=crop',
+          image: img2,
           title_line1: 'Excellence in',
           title_highlight: 'Bilingual Education',
           subtitle: 'Our curriculum ensures fluency in French and Arabic, preparing students for a global future.',
         },
         {
-          image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2000&auto=format&fit=crop',
+          image: img3,
           title_line1: 'Building Strong',
           title_highlight: 'Character',
           subtitle: 'Beyond academics, we instill moral values, discipline, and leadership skills in every student.',
+        },
+        {
+          image: img4,
+          title_line1: 'Nurturing the',
+          title_highlight: 'Leaders of Chad',
+          subtitle: "Académie Royale offers a world-class bilingual education in N'Djamena, blending academic excellence with Chadian values.",
         },
       ],
     },
@@ -297,22 +308,28 @@ export const translations = {
       cta_secondary: "Visiter l'école",
       slides: [
         {
-          image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop',
+          image: img1,
           title_line1: 'Cultiver les',
           title_highlight: 'Leaders du Tchad',
           subtitle: "L'Académie Royale offre une éducation bilingue de classe mondiale à N'Djamena, alliant excellence académique et valeurs tchadiennes.",
         },
         {
-          image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=2000&auto=format&fit=crop',
+          image: img2,
           title_line1: 'Excellence en',
           title_highlight: 'Éducation Bilingue',
           subtitle: "Notre programme assure la maîtrise du français et de l'arabe, préparant les élèves à un avenir mondial.",
         },
         {
-          image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2000&auto=format&fit=crop',
+          image: img3,
           title_line1: 'Bâtir un',
           title_highlight: 'Caractère Fort',
           subtitle: "Au-delà des études, nous inculquons des valeurs morales, la discipline et le leadership à chaque élève.",
+        },
+        {
+          image: img4,
+          title_line1: 'Cultiver les',
+          title_highlight: 'Leaders du Tchad',
+          subtitle: "L'Académie Royale offre une éducation bilingue de classe mondiale à N'Djamena, alliant excellence académique et valeurs tchadiennes.",
         },
       ],
     },

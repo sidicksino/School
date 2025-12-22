@@ -49,6 +49,13 @@ export const translations = {
         },
       ],
     },
+    levels_hero: {
+      badge: 'Admissions Open 2024-2025',
+      headline_line1: 'Are You',
+      headline_line2: 'Ready For School?',
+      description: 'Académie Royale offers a world-class bilingual education to prepare your child for a bright future. Join us today.',
+      button: 'Learn More',
+    },
     stats: {
       experience: 'Years of Excellence',
       alumni: 'Happy Students',
@@ -332,6 +339,13 @@ export const translations = {
           subtitle: "L'Académie Royale offre une éducation bilingue de classe mondiale à N'Djamena, alliant excellence académique et valeurs tchadiennes.",
         },
       ],
+    },
+    levels_hero: {
+      badge: 'Inscriptions Ouvertes',
+      headline_line1: 'Êtes-vous',
+      headline_line2: "Prêts pour l'École ?",
+      description: "L'Académie Royale offre une éducation bilingue de classe mondiale pour préparer votre enfant à un avenir brillant. Rejoignez-nous.",
+      button: 'En Savoir Plus',
     },
     stats: {
       experience: "Années d'Excellence",

@@ -12,7 +12,17 @@ import { Programs } from './components/sections/Programs';
 import { About } from './components/sections/About';
 import { Contact } from './components/sections/Contact';
 
-// New Components
+import { LevelsHero } from './components/sections/LevelsHero';
+
+// ... other imports
+
+const ProgramsPage = () => (
+  <>
+    <LevelsHero />
+    <Programs />
+    <Curriculum />
+  </>
+);
 import { Welcome } from './components/sections/Welcome';
 import { WhyChooseUs } from './components/sections/WhyChooseUs';
 import { Testimonials } from './components/sections/Testimonials';
@@ -39,12 +49,7 @@ const Home = () => (
   </>
 );
 
-const ProgramsPage = () => (
-  <>
-    <Programs />
-    <Curriculum />
-  </>
-);
+
 
 const AboutPage = () => (
   <>

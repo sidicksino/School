@@ -78,9 +78,9 @@ export const VisitSchool: React.FC = () => {
                  {t('visit.hero.badge')}
                </span>
                <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-black text-foreground mb-6 leading-[1.1]">
-                 Experience <br />
+                 {t('visit.hero.title_line1')} <br />
                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-600">
-                    Our Campus
+                    {t('visit.hero.title_highlight')}
                  </span>
                </h1>
                <div className="h-1.5 w-24 bg-accent rounded-full mb-8" />
@@ -91,10 +91,10 @@ export const VisitSchool: React.FC = () => {
 
                <div className="flex flex-col sm:flex-row gap-4">
                   <Button size="lg" className="shadow-lg shadow-accent/20">
-                    Schedule Now
+                    {t('visit.hero.cta_schedule')}
                   </Button>
                   <Button variant="outline" size="lg" className="border-2">
-                    Virtual Tour
+                    {t('visit.hero.cta_virtual')}
                   </Button>
                </div>
 
@@ -102,11 +102,11 @@ export const VisitSchool: React.FC = () => {
                <div className="mt-12 flex gap-8 border-t border-foreground/10 pt-8">
                   <div>
                      <p className="font-bold text-2xl text-foreground">100%</p>
-                     <p className="text-xs text-muted uppercase">Secure</p>
+                     <p className="text-xs text-muted uppercase">{t('visit.hero.secure')}</p>
                   </div>
                   <div>
                      <p className="font-bold text-2xl text-foreground">24/7</p>
-                     <p className="text-xs text-muted uppercase">Support</p>
+                     <p className="text-xs text-muted uppercase">{t('visit.hero.support')}</p>
                   </div>
                </div>
             </motion.div>
@@ -131,8 +131,8 @@ export const VisitSchool: React.FC = () => {
                            <MapPin className="w-5 h-5" />
                         </div>
                         <div>
-                           <p className="font-bold text-foreground text-sm">Quartier Klémat</p>
-                           <p className="text-xs text-muted">N'Djamena, Tchad</p>
+                           <p className="font-bold text-foreground text-sm">{t('visit.hero.location_badge_line1')}</p>
+                           <p className="text-xs text-muted">{t('visit.hero.location_badge_line2')}</p>
                         </div>
                      </div>
                   </div>
@@ -212,10 +212,10 @@ export const VisitSchool: React.FC = () => {
                     <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mb-6 animate-pulse">
                         <CheckCircle className="w-12 h-12 text-green-500" />
                     </div>
-                    <h2 className="text-3xl font-bold font-heading mb-4 text-green-500">Success!</h2>
+                    <h2 className="text-3xl font-bold font-heading mb-4 text-green-500">{t('visit.form.success_title')}</h2>
                     <p className="text-muted mb-8 text-lg max-w-xs mx-auto">{t('visit.form.success')}</p>
                     <Button onClick={() => setStatus('idle')} variant="outline" className="min-w-[200px]">
-                        Schedule Another
+                        {t('visit.form.another')}
                     </Button>
                 </motion.div>
              ) : (

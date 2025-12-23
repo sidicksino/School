@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { LanguageProvider } from './contexts/LanguageContext';
+import { LanguageProvider, useTranslation } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -16,17 +16,6 @@ import { Contact } from './components/sections/Contact';
 
 import { LevelsHero } from './components/sections/LevelsHero';
 import { AboutHero } from './components/sections/AboutHero';
-
-// ... other imports
-
-const ProgramsPage = () => (
-  <>
-    <SEO title="Academic Levels" description="Discover our comprehensive curriculum from Kindergarten to Primary School." />
-    <LevelsHero />
-    <Programs />
-    <Curriculum />
-  </>
-);
 import { Welcome } from './components/sections/Welcome';
 import { WhyChooseUs } from './components/sections/WhyChooseUs';
 import { Testimonials } from './components/sections/Testimonials';
@@ -42,51 +31,30 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="pt-20">{children}</div>
 );
 
-const Home = () => (
-  <>
-    <SEO title="Home" description="Académie Royale - Nurturing the Future Leaders of Chad with Excellence and Values." />
-    <Hero />
-    <Stats />
-    <Welcome />
-    <WhyChooseUs />
-    <Testimonials />
-    <News />
-  </>
-);
-
-
-
-const AboutPage = () => (
-  <>
-    <SEO title="About Us" description="Learn about our mission, history, and the dedicated team behind Académie Royale." />
-    <AboutHero />
-    <About />
-    <Team />
-    <Facilities />
-  </>
-);
-
-const ContactPage = () => (
-  <>
-    <SEO title="Contact Us" description="Get in touch with Académie Royale for admissions, inquiries, or to schedule a visit." />
-    <Contact />
-    <FAQ />
-  </>
-);
-
-const VisitPage = () => (
-  <>
-    <SEO title="Visit Our Campus" description="Book a tour to see our modern facilities and meet our educators." />
-    <VisitSchool />
-  </>
-);
-
 const App: React.FC = () => {
-  return (
+    // We need to use translation hook inside a component that is inside LanguageProvider.
+    // However, App is the one rendering LanguageProvider.
+    // Solution: Move SEO logic to a child component or use a wrapper.
+    // For simplicity, we'll keep the structure but we can't use 't' here directly if it's outside.
+    // Wait, the page components (Home, AboutPage, etc) are defined OUTSIDE App component in this file.
+    // They need to be React components to use hook.
+    // The current definition `const Home = () => ...` is correct for a component.
+    // We just need to move `useTranslation` hook INSIDE them.
+    return (
     <ErrorBoundary>
       <HelmetProvider>
         <LanguageProvider>
-      <ThemeProvider>
+          <ThemeProvider>
+             <AppContent />
+          </ThemeProvider>
+        </LanguageProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
+  );
+};
+
+const AppContent = () => {
+  return (
         <HashRouter>
           <ScrollToTop />
           <div className="min-h-screen flex flex-col font-sans bg-primary text-foreground transition-colors duration-300 overflow-x-hidden">
@@ -133,10 +101,69 @@ const App: React.FC = () => {
             <Footer />
           </div>
         </HashRouter>
-      </ThemeProvider>
-    </LanguageProvider>
-      </HelmetProvider>
-    </ErrorBoundary>
+  );
+};
+
+// Now update the page components to use useTranslation
+
+const ProgramsPage = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <SEO title={t('seo.programs.title')} description={t('seo.programs.desc')} />
+      <LevelsHero />
+      <Programs />
+      <Curriculum />
+    </>
+  );
+};
+
+const Home = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <SEO title={t('seo.home.title')} description={t('seo.home.desc')} />
+      <Hero />
+      <Stats />
+      <Welcome />
+      <WhyChooseUs />
+      <Testimonials />
+      <News />
+    </>
+  );
+};
+
+const AboutPage = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <SEO title={t('seo.about.title')} description={t('seo.about.desc')} />
+      <AboutHero />
+      <About />
+      <Team />
+      <Facilities />
+    </>
+  );
+};
+
+const ContactPage = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <SEO title={t('seo.contact.title')} description={t('seo.contact.desc')} />
+      <Contact />
+      <FAQ />
+    </>
+  );
+};
+
+const VisitPage = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <SEO title={t('seo.visit.title')} description={t('seo.visit.desc')} />
+      <VisitSchool />
+    </>
   );
 };
 

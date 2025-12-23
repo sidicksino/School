@@ -23,15 +23,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Static Search Index
+  // Dynamic Search Index using translations
   const searchIndex: SearchItem[] = [
-    { id: '1', title: 'Home', description: 'Main page of Académie Royale', path: '/', tags: ['home', 'accueil', 'index'] },
-    { id: '2', title: 'Programs', description: 'Explore our academic cycles', path: '/programs', tags: ['programs', 'levels', 'kindergarten', 'primary', 'curriculum'] },
-    { id: '3', title: 'About Us', description: 'Our history, mission, and team', path: '/about', tags: ['about', 'history', 'mission', 'team', 'facilities'] },
-    { id: '4', title: 'Contact', description: 'Get in touch with us', path: '/contact', tags: ['contact', 'email', 'phone', 'address'] },
-    { id: '5', title: 'Visit School', description: 'Schedule a campus tour', path: '/visit', tags: ['visit', 'tour', 'map', 'location'] },
-    { id: '6', title: 'News', description: 'Latest updates and events', path: '/#news', tags: ['news', 'events', 'blog', 'updates'] },
-    { id: '7', title: 'Admissions', description: 'Join Académie Royale', path: '/contact', tags: ['admissions', 'enroll', 'join', 'register'] },
+    { id: '1', title: t('search.items.home.title'), description: t('search.items.home.desc'), path: '/', tags: ['home', 'accueil', 'index'] },
+    { id: '2', title: t('search.items.programs.title'), description: t('search.items.programs.desc'), path: '/programs', tags: ['programs', 'levels', 'kindergarten', 'primary', 'curriculum'] },
+    { id: '3', title: t('search.items.about.title'), description: t('search.items.about.desc'), path: '/about', tags: ['about', 'history', 'mission', 'team', 'facilities'] },
+    { id: '4', title: t('search.items.contact.title'), description: t('search.items.contact.desc'), path: '/contact', tags: ['contact', 'email', 'phone', 'address'] },
+    { id: '5', title: t('search.items.visit.title'), description: t('search.items.visit.desc'), path: '/visit', tags: ['visit', 'tour', 'map', 'location'] },
+    { id: '6', title: t('search.items.news.title'), description: t('search.items.news.desc'), path: '/#news', tags: ['news', 'events', 'blog', 'updates'] },
+    { id: '7', title: t('search.items.admissions.title'), description: t('search.items.admissions.desc'), path: '/contact', tags: ['admissions', 'enroll', 'join', 'register'] },
   ];
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
       item.tags.some(tag => tag.includes(lowerQuery))
     );
     setResults(filtered);
-  }, [query]);
+  }, [query, t]); // dependency on t to update if language changes
 
   const handleSelect = (path: string) => {
     navigate(path);
@@ -91,7 +91,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                 <Search className="w-5 h-5 text-muted" />
                 <input
                   type="text"
-                  placeholder="Search pages, topics..."
+                  placeholder={t('search.placeholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   autoFocus
@@ -110,7 +110,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                 {query === '' ? (
                    <div className="p-8 text-center text-muted">
                       <Command className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                      <p>Type to search across Académie Royale</p>
+                      <p>{t('search.initial')}</p>
                    </div>
                 ) : results.length > 0 ? (
                   <div className="space-y-1">
@@ -132,15 +132,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                   </div>
                 ) : (
                   <div className="p-8 text-center text-muted">
-                    <p>No results found for "{query}"</p>
+                    <p>{t('search.no_results')} "{query}"</p>
                   </div>
                 )}
               </div>
               
               {/* Footer */}
               <div className="p-3 border-t border-foreground/5 bg-secondary/30 text-xs text-muted flex justify-between">
-                 <span>Press <strong>ESC</strong> to close</span>
-                 <span><strong>{results.length}</strong> results found</span>
+                 <span>{t('search.close')}</span>
+                 <span><strong>{results.length}</strong> {t('search.results_count')}</span>
               </div>
             </div>
           </motion.div>

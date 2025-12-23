@@ -3,17 +3,25 @@ import { motion, HTMLMotionProps } from 'framer-motion';
 
 interface ButtonProps extends HTMLMotionProps<'button'> {
   variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
+  size = 'md',
   children,
   className = '',
   ...props
 }) => {
   const baseStyles =
-    'px-6 py-3 rounded-lg font-medium tracking-wide transition-all duration-300 relative overflow-hidden group font-sans flex items-center justify-center gap-2';
+    'rounded-lg font-medium tracking-wide transition-all duration-300 relative overflow-hidden group font-sans flex items-center justify-center gap-2';
+
+  const sizes = {
+    sm: 'px-4 py-2 text-sm',
+    md: 'px-6 py-3',
+    lg: 'px-8 py-4 text-lg',
+  };
 
   const variants = {
     primary:
@@ -28,7 +36,7 @@ export const Button: React.FC<ButtonProps> = ({
     <motion.button
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`${baseStyles} ${variants[variant]} ${className}`}
+      className={`${baseStyles} ${sizes[size]} ${variants[variant]} ${className}`}
       {...props}
     >
       <span className="relative z-10 flex items-center gap-2">{children}</span>

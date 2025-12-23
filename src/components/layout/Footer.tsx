@@ -55,6 +55,7 @@ export const Footer: React.FC = () => {
                   key={i}
                   href="#"
                   className="w-10 h-10 rounded-lg bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted hover:text-white hover:bg-accent hover:border-accent transition-all duration-300 group"
+                  aria-label={`Visit our ${['Twitter', 'LinkedIn', 'Instagram'][i]} page`}
                 >
                   <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </a>

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { PenTool, Book, Ruler, MousePointer2 } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
-import imgStudent from '../../assets/2.png'; // Using a placeholder student image
+import imgStudent from '../../assets/2.webp'; // Using a placeholder student image
 
 export const LevelsHero: React.FC = () => {
   const { t } = useTranslation();

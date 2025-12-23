@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Section } from '../ui/Section';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { Search, MapPin } from 'lucide-react';
-import studentImage from '../../assets/4.png'; // Using img4 from translations as placeholder
+import studentImage from '../../assets/4.webp'; // Using img4 from translations as placeholder
 
 export const AboutHero: React.FC = () => {
   const { t } = useTranslation();

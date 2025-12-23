@@ -78,6 +78,7 @@ export const Header: React.FC = () => {
             <button 
                 onClick={() => setIsSearchOpen(true)}
                 className="p-2 text-muted hover:text-accent transition-colors rounded-full hover:bg-secondary/50"
+                aria-label="Open search"
             >
                 <Search className="w-5 h-5" />
             </button>
@@ -101,6 +102,7 @@ export const Header: React.FC = () => {
             <button 
                 onClick={() => setIsSearchOpen(true)}
                 className="text-foreground hover:text-accent transition-colors"
+                aria-label="Open search"
             >
                 <Search className="w-5 h-5" />
             </button>
@@ -109,6 +111,7 @@ export const Header: React.FC = () => {
             <button
               className="text-foreground hover:text-accent transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>

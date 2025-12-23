@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Phone, Calendar, Mail, User, Info, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useTranslation } from '../../contexts/LanguageContext';
-import img2 from '../../assets/2.png'; // Using existing student image
+import img2 from '../../assets/2.webp'; // Using existing student image
 
 export const VisitSchool: React.FC = () => {
   const { t } = useTranslation();
@@ -183,6 +183,7 @@ export const VisitSchool: React.FC = () => {
                style={{ border: 0 }} 
                allowFullScreen 
                loading="lazy"
+               title="Google Map of Académie Royale location in N'Djamena"
                referrerPolicy="no-referrer-when-downgrade"
                className="grayscale group-hover:grayscale-0 transition-all duration-700"
              />

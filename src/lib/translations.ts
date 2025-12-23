@@ -13,6 +13,7 @@ export const translations = {
       about: 'About',
       contact: 'Contact',
       join: 'Enroll Now',
+      dashboard: 'Dashboard',
     },
     hero: {
       badge: 'Admissions Open 2024-2025',
@@ -397,6 +398,7 @@ export const translations = {
       about: 'À Propos',
       contact: 'Contact',
       join: "S'inscrire",
+      dashboard: 'Mon Espace',
     },
     hero: {
       badge: 'Inscriptions Ouvertes 2024-2025',

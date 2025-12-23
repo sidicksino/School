@@ -25,7 +25,7 @@ export const LoginPage: React.FC = () => {
     const { error } = await login(formData.username, formData.password);
     
     if (error) {
-        alert('Login failed: ' + error);
+        alert(t('auth.login.failed') + error);
         setIsSubmitting(false);
     } else {
         console.log('Login successful');

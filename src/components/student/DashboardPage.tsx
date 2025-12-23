@@ -34,7 +34,7 @@ export const DashboardPage: React.FC = () => {
                             className="flex items-center gap-2 px-4 py-2 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
                         >
                             <LogOut className="w-4 h-4" />
-                            <span>{t('auth.logout') || 'Déconnexion'}</span>
+                            <span>{t('auth.logout')}</span>
                         </button>
                     </div>
                 </div>
@@ -45,19 +45,19 @@ export const DashboardPage: React.FC = () => {
                     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6">
                         <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                             <GraduationCap className="w-5 h-5 text-accent" />
-                            Informations Académiques
+                            {t('dashboard.academic_info')}
                         </h2>
                         <div className="space-y-4">
                             <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">Cycle</span>
+                                <span className="text-muted">{t('dashboard.cycle')}</span>
                                 <span className="font-bold text-foreground">{user.cycle}</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">Classe</span>
+                                <span className="text-muted">{t('dashboard.classe')}</span>
                                 <span className="font-bold text-foreground">{user.classe}</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">Role</span>
+                                <span className="text-muted">{t('dashboard.role')}</span>
                                 <span className="font-bold text-accent capitalize">{user.role}</span>
                             </div>
                         </div>
@@ -67,12 +67,12 @@ export const DashboardPage: React.FC = () => {
                     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6">
                         <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                             <Phone className="w-5 h-5 text-accent" />
-                            Coordonnées
+                            {t('dashboard.contact_info')}
                         </h2>
                         <div className="space-y-4">
                              <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">Téléphone</span>
-                                <span className="font-bold text-foreground min-h-[1.5rem]">{user.phone || 'Non renseigné'}</span>
+                                <span className="text-muted">{t('dashboard.phone')}</span>
+                                <span className="font-bold text-foreground min-h-[1.5rem]">{user.phone || t('dashboard.not_provided')}</span>
                             </div>
                         </div>
                     </div>

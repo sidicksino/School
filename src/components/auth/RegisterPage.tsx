@@ -48,7 +48,7 @@ export const RegisterPage: React.FC = () => {
     if (!formData.password) {
         newErrors.password = t('auth.errors.required');
     } else if (formData.password.length < 6) {
-        newErrors.password = 'Min 6 characters'; // Could be translated too
+        newErrors.password = t('auth.errors.min_chars');
     }
 
     if (formData.password !== formData.confirm_password) {
@@ -75,7 +75,7 @@ export const RegisterPage: React.FC = () => {
     const { error } = await register(formData);
     
     if (error) {
-        alert('Registration failed: ' + error); // Simple alert for now, could be better UI
+        alert(t('auth.register.failed') + error); // Simple alert for now, could be better UI
         setIsSubmitting(false);
     } else {
         console.log('Registered:', formData);
@@ -118,8 +118,8 @@ export const RegisterPage: React.FC = () => {
                   <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                       <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-4">Registration Successful!</h3>
-                  <p className="text-muted mb-8">Your account has been created. You can now log in.</p>
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t('auth.register.success_title')}</h3>
+                  <p className="text-muted mb-8">{t('auth.register.success_desc')}</p>
                   <Link to="/student/login">
                     <button className="w-full py-4 text-white bg-accent rounded-xl font-bold shadow-lg shadow-accent/20 hover:bg-yellow-400 transition-colors">
                         {t('auth.register.login_link')}

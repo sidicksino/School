@@ -351,6 +351,8 @@ export const translations = {
       login: {
         title: 'Student Login',
         subtitle: 'Access your portal',
+        id_label: 'Username',
+        id_placeholder: 'Enter your username',
         cta: 'Sign In',
         no_account: "Don't have an account?",
         register_link: 'Register',
@@ -366,8 +368,7 @@ export const translations = {
       },
       fields: {
         surname: 'Surname',
-        firstname: 'First Name',
-        nickname: 'Nickname',
+        fullname: 'Full Name',
         phone: 'Phone Number',
         password: 'Password',
         confirm_password: 'Confirm Password',
@@ -733,6 +734,8 @@ export const translations = {
       login: {
         title: 'Connexion Étudiant',
         subtitle: 'Accédez à votre espace',
+        id_label: 'Surnom',
+        id_placeholder: 'Entrez votre surnom',
         cta: 'Se Connecter',
         no_account: "Pas encore de compte ?",
         register_link: "S'inscrire",
@@ -747,9 +750,8 @@ export const translations = {
         terms: "J'accepte les conditions d'utilisation.",
       },
       fields: {
-        surname: 'Nom',
-        firstname: 'Prénom',
-        nickname: 'Surnom',
+        surname: 'Surnom',
+        fullname: 'Nom et Prénom',
         phone: 'Numéro de Téléphone',
         password: 'Mot de Passe',
         confirm_password: 'Confirmer le Mot de Passe',

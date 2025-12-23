@@ -9,8 +9,7 @@ export const RegisterPage: React.FC = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     surname: '',
-    firstname: '',
-    nickname: '',
+    fullname: '',
     cycle: '',
     classe: '',
     phone: '',
@@ -29,27 +28,13 @@ export const RegisterPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Mock checking if nickname is taken
-  const checkNickname = (nickname: string) => {
-    // In a real app, this would be an API call
-    const takenNicknames = ['royal_student', 'admin', 'test'];
-    return takenNicknames.includes(nickname.toLowerCase());
-  };
-
   const validate = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.surname) newErrors.surname = t('auth.errors.required');
-    if (!formData.firstname) newErrors.firstname = t('auth.errors.required');
+    if (!formData.fullname) newErrors.fullname = t('auth.errors.required');
     if (!formData.cycle) newErrors.cycle = t('auth.errors.required');
     if (!formData.classe) newErrors.classe = t('auth.errors.required');
-    
-    // Nickname validation
-    if (!formData.nickname) {
-        newErrors.nickname = t('auth.errors.required');
-    } else if (checkNickname(formData.nickname)) {
-        newErrors.nickname = t('auth.errors.nickname_taken');
-    }
 
     // Phone validation (Simple check for digits)
     if (!formData.phone) {
@@ -161,57 +146,39 @@ export const RegisterPage: React.FC = () => {
                 {errors.surname && <p className="text-red-500 text-xs mt-1 ml-1">{errors.surname}</p>}
             </div>
             <div>
-                <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.firstname')}</label>
+                <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.fullname')}</label>
                 <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
                     <input
-                        name="firstname"
+                        name="fullname"
                         type="text"
-                        value={formData.firstname}
+                        value={formData.fullname}
                         onChange={handleChange}
-                        className={`${inputClasses} ${errors.firstname ? 'border-red-500' : ''}`}
+                        className={`${inputClasses} ${errors.fullname ? 'border-red-500' : ''}`}
                         placeholder="Ex: Moussa"
                     />
                 </div>
-                 {errors.firstname && <p className="text-red-500 text-xs mt-1 ml-1">{errors.firstname}</p>}
+                 {errors.fullname && <p className="text-red-500 text-xs mt-1 ml-1">{errors.fullname}</p>}
             </div>
         </div>
 
-        {/* Nickname & Cycle */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <div>
-                <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.nickname')}</label>
-                <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold text-lg">@</span>
-                    <input
-                        name="nickname"
-                        type="text"
-                        value={formData.nickname}
-                        onChange={handleChange}
-                        className={`${inputClasses}`}
-                        placeholder="Unique ID"
-                    />
-                </div>
-                {errors.nickname && <p className="text-red-500 text-xs mt-1 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> {errors.nickname}</p>}
+        {/* Cycle Selection */}
+        <div>
+            <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.cycle')}</label>
+            <div className="relative">
+                <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
+                <select
+                    name="cycle"
+                    value={formData.cycle}
+                    onChange={handleChange}
+                    className={`${inputClasses} appearance-none cursor-pointer`}
+                >
+                    <option value="">{t('auth.fields.select_cycle')}</option>
+                    <option value="college">{t('auth.cycles.college')}</option>
+                    <option value="lycee">{t('auth.cycles.lycee')}</option>
+                </select>
             </div>
-
-            <div>
-                <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.cycle')}</label>
-                <div className="relative">
-                    <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-                    <select
-                        name="cycle"
-                        value={formData.cycle}
-                        onChange={handleChange}
-                        className={`${inputClasses} appearance-none cursor-pointer`}
-                    >
-                        <option value="">{t('auth.fields.select_cycle')}</option>
-                        <option value="college">{t('auth.cycles.college')}</option>
-                        <option value="lycee">{t('auth.cycles.lycee')}</option>
-                    </select>
-                </div>
-                {errors.cycle && <p className="text-red-500 text-xs mt-1 ml-1">{errors.cycle}</p>}
-            </div>
+            {errors.cycle && <p className="text-red-500 text-xs mt-1 ml-1">{errors.cycle}</p>}
         </div>
 
         {/* Dynamic Class Selection */}

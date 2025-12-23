@@ -23,8 +23,7 @@ describe('RegisterPage', () => {
     
     expect(screen.getByText(/Inscription Étudiant/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Ex: Mahamat')).toBeInTheDocument(); // Nom
-    expect(screen.getByPlaceholderText('Ex: Moussa')).toBeInTheDocument(); // Prénom
-    expect(screen.getByPlaceholderText('Unique ID')).toBeInTheDocument(); // Surnom
+    expect(screen.getByPlaceholderText('Ex: Moussa')).toBeInTheDocument(); // Fullname (Prénom)
     expect(screen.getByText('Collège')).toBeInTheDocument(); // Cycle option
   });
 

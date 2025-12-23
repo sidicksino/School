@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 export const LoginPage: React.FC = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
-    nickname: '',
+    username: '',
     password: '',
   });
 
@@ -35,17 +35,17 @@ export const LoginPage: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         
         <div>
-            <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.nickname')}</label>
+            <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.login.id_label')}</label>
             <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold text-lg">@</span>
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
                 <input
-                    name="nickname"
+                    name="username"
                     type="text"
-                    value={formData.nickname}
+                    value={formData.username}
                     onChange={handleChange}
                     required
                     className={inputClasses}
-                    placeholder="Your ID"
+                    placeholder={t('auth.login.id_placeholder')}
                 />
             </div>
         </div>

@@ -14,6 +14,7 @@ import { About } from './components/sections/About';
 import { Contact } from './components/sections/Contact';
 
 import { LevelsHero } from './components/sections/LevelsHero';
+import { AboutHero } from './components/sections/AboutHero';
 
 // ... other imports
 
@@ -54,6 +55,7 @@ const Home = () => (
 
 const AboutPage = () => (
   <>
+    <AboutHero />
     <About />
     <Team />
     <Facilities />

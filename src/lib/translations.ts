@@ -184,6 +184,12 @@ export const translations = {
         },
       ],
     },
+    about_hero: {
+      headline: 'International School',
+      subheadline: 'Your future begins here',
+      description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat ad minim veniam.',
+      button: 'Admission',
+    },
     about: {
       title_line1: 'A Foundation for',
       title_highlight1: 'Success',
@@ -474,6 +480,12 @@ export const translations = {
           a: 'Nous maintenons un ratio de 25 élèves par classe pour assurer un suivi personnalisé.',
         },
       ],
+    },
+    about_hero: {
+      headline: 'École Internationale',
+      subheadline: 'Votre avenir commence ici',
+      description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat ad minim veniam.',
+      button: 'Admission',
     },
     about: {
       title_line1: 'Une Fondation pour',

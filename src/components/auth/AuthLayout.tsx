@@ -8,9 +8,11 @@ interface AuthLayoutProps {
   children: React.ReactNode;
   title: string;
   subtitle: string;
+  className?: string;
+  maxWidth?: string;
 }
 
-export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitle }) => {
+export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitle, className = "", maxWidth = "max-w-lg" }) => {
   return (
     <div className="min-h-screen pt-24 pb-12 flex items-center justify-center relative overflow-hidden bg-primary dark:bg-[#0f172a]">
       {/* Dynamic Background Elements */}
@@ -18,12 +20,12 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitl
       <div className="absolute top-20 left-10 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10 animate-pulse" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-neon/5 rounded-full blur-3xl -z-10" />
 
-      <div className="container mx-auto px-4 relative z-10 max-w-lg">
+      <div className={`container mx-auto px-4 relative z-10 ${maxWidth}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white/80 dark:bg-[#1e293b]/90 backdrop-blur-xl border border-foreground/5 dark:border-white/5 shadow-2xl rounded-3xl p-8 md:p-10 relative overflow-hidden"
+          className={`bg-white/80 dark:bg-[#1e293b]/90 backdrop-blur-xl border border-foreground/5 dark:border-white/5 shadow-2xl rounded-3xl p-8 md:p-10 relative overflow-hidden ${className}`}
         >
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-accent to-neon" />
             

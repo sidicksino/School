@@ -12,11 +12,18 @@ export const RegisterPage: React.FC = () => {
     firstname: '',
     nickname: '',
     cycle: '',
+    classe: '',
     phone: '',
     password: '',
     confirm_password: '',
     terms: false,
   });
+
+  const getClassesForCycle = (cycle: string) => {
+    if (cycle === 'college') return ['6ème', '5ème', '4ème', '3ème'];
+    if (cycle === 'lycee') return ['2nde', '1ère S', '1ère L', 'Terminale D1', 'Terminale D2', 'Terminale A1', 'Terminale A2'];
+    return [];
+  };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +42,7 @@ export const RegisterPage: React.FC = () => {
     if (!formData.surname) newErrors.surname = t('auth.errors.required');
     if (!formData.firstname) newErrors.firstname = t('auth.errors.required');
     if (!formData.cycle) newErrors.cycle = t('auth.errors.required');
+    if (!formData.classe) newErrors.classe = t('auth.errors.required');
     
     // Nickname validation
     if (!formData.nickname) {
@@ -85,10 +93,21 @@ export const RegisterPage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    // Handle checkbox
-    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     
-    setFormData(prev => ({ ...prev, [name]: val }));
+    // Handle checkbox separately for type safety
+    if (type === 'checkbox') {
+        const checked = (e.target as HTMLInputElement).checked;
+        setFormData(prev => ({ ...prev, [name]: checked }));
+    } else {
+        // Handle normal inputs (string values)
+        if (name === 'cycle' && value !== formData.cycle) {
+            // Reset class when cycle changes
+            setFormData(prev => ({ ...prev, [name]: value, classe: '' }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+    }
+
     // Clear error when user types
     if (errors[name]) {
         setErrors(prev => ({ ...prev, [name]: '' }));
@@ -121,11 +140,11 @@ export const RegisterPage: React.FC = () => {
   const inputClasses = "w-full bg-secondary/30 dark:bg-[#0f172a] border border-foreground/10 dark:border-white/10 rounded-xl py-3.5 pl-12 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all dark:text-white";
 
   return (
-    <AuthLayout title={t('auth.register.title')} subtitle={t('auth.register.subtitle')}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <AuthLayout title={t('auth.register.title')} subtitle={t('auth.register.subtitle')} maxWidth="max-w-2xl">
+      <form onSubmit={handleSubmit} className="space-y-5">
         
-        {/* Name Fields */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* Name Fields - Stack on mobile, side-by-side on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label className="text-xs font-bold uppercase text-muted mb-1 block pl-1">{t('auth.fields.surname')}</label>
                 <div className="relative">
@@ -194,6 +213,37 @@ export const RegisterPage: React.FC = () => {
                 {errors.cycle && <p className="text-red-500 text-xs mt-1 ml-1">{errors.cycle}</p>}
             </div>
         </div>
+
+        {/* Dynamic Class Selection */}
+        <AnimatePresence>
+            {formData.cycle && (
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                >
+                     <div>
+                        <label className="text-xs font-bold uppercase text-accent mb-1 block pl-1">{t('auth.fields.classe')}</label>
+                        <div className="relative">
+                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-accent" />
+                            <select
+                                name="classe"
+                                value={formData.classe}
+                                onChange={handleChange}
+                                className={`${inputClasses} appearance-none cursor-pointer border-accent/30 bg-accent/5`}
+                            >
+                                <option value="">{t('auth.fields.select_classe')}</option>
+                                {getClassesForCycle(formData.cycle).map((cls) => (
+                                    <option key={cls} value={cls}>{cls}</option>
+                                ))}
+                            </select>
+                        </div>
+                        {errors.classe && <p className="text-red-500 text-xs mt-1 ml-1">{errors.classe}</p>}
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
 
         {/* Phone */}
         <div>

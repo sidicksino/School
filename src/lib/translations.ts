@@ -373,6 +373,8 @@ export const translations = {
         confirm_password: 'Confirm Password',
         cycle: 'Education Level',
         select_cycle: 'Select Cycle',
+        classe: 'Class',
+        select_classe: 'Select Class',
       },
       errors: {
         required: 'This field is required',
@@ -753,6 +755,8 @@ export const translations = {
         confirm_password: 'Confirmer le Mot de Passe',
         cycle: 'Niveau',
         select_cycle: 'Sélectionner un Cycle',
+        classe: 'Classe',
+        select_classe: 'Sélectionner une Classe',
       },
       errors: {
         required: 'Ce champ est requis',

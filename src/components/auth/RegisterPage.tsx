@@ -148,7 +148,7 @@ export const RegisterPage: React.FC = () => {
                         value={formData.surname}
                         onChange={handleChange}
                         className={`${inputClasses} ${errors.surname ? 'border-red-500' : ''}`}
-                        placeholder="Ex: Mahamat"
+                        placeholder="Ex: Sidick"
                     />
                 </div>
                 {errors.surname && <p className="text-red-500 text-xs mt-1 ml-1">{errors.surname}</p>}
@@ -163,7 +163,7 @@ export const RegisterPage: React.FC = () => {
                         value={formData.fullname}
                         onChange={handleChange}
                         className={`${inputClasses} ${errors.fullname ? 'border-red-500' : ''}`}
-                        placeholder="Ex: Moussa"
+                        placeholder="Ex: Sidick Abdoulaye"
                     />
                 </div>
                  {errors.fullname && <p className="text-red-500 text-xs mt-1 ml-1">{errors.fullname}</p>}

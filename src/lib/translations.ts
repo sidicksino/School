@@ -254,6 +254,7 @@ export const translations = {
       success: 'Thank you! We have received your request.',
       error: 'Something went wrong. Please try again.',
       loading: 'Sending...',
+      button: 'Send Request',
     },
     visit: {
       hero: {
@@ -637,6 +638,7 @@ export const translations = {
       success: 'Merci ! Nous avons bien reçu votre demande.',
       error: 'Une erreur est survenue. Veuillez réessayer.',
       loading: 'Envoi...',
+      button: 'Envoyer',
     },
     visit: {
       hero: {

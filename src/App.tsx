@@ -6,6 +6,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
+import { ScrollToTop } from './components/ScrollToTop';
 import { Hero } from './components/sections/Hero';
 import { Stats } from './components/sections/Stats';
 import { Programs } from './components/sections/Programs';
@@ -83,6 +84,7 @@ const App: React.FC = () => {
         <LanguageProvider>
       <ThemeProvider>
         <HashRouter>
+          <ScrollToTop />
           <div className="min-h-screen flex flex-col font-sans bg-primary text-foreground transition-colors duration-300 overflow-x-hidden">
             <Header />
             <main className="flex-grow">

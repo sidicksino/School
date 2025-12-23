@@ -87,7 +87,7 @@ export const translations = {
         },
         {
           title: 'Secure Campus',
-          desc: 'A modern, secure environment in Quartier Klémat monitored 24/7.',
+          desc: 'A modern, secure environment in Klémat District monitored 24/7.',
         },
       ],
     },
@@ -221,22 +221,22 @@ export const translations = {
       explore: 'View Details',
       items: {
         kindergarten: {
-          title: 'Maternelle',
+          title: 'Preschool',
           desc: 'Petite, Moyenne, Grande Section. Early childhood development focusing on socialization and basic skills.',
           duration: '3 - 5 Years',
         },
         primary: {
-          title: 'Primaire',
+          title: 'Primary School',
           desc: 'CP to CM2. Building strong foundations in literacy and numeracy, leading to the CEP.',
           duration: '6 - 11 Years',
         },
         college: {
-          title: 'Collège',
+          title: 'Middle School',
           desc: '6ème to 3ème. Lower secondary education culminating in the BEPC exam.',
           duration: '12 - 15 Years',
         },
         lycee: {
-          title: 'Lycée',
+          title: 'High School',
           desc: '2nde to Terminale. Upper secondary specializing in Series A (Arts) and D (Sciences), leading to the Baccalauréat.',
           duration: '16 - 18 Years',
         },
@@ -262,7 +262,7 @@ export const translations = {
         cta_virtual: 'Virtual Tour',
         secure: 'Secure',
         support: 'Support',
-        location_badge_line1: 'Quartier Klémat',
+        location_badge_line1: 'Klémat District',
         location_badge_line2: "N'Djamena, Chad",
       },
       info: {
@@ -273,7 +273,7 @@ export const translations = {
         },
         location: {
           title: 'Location',
-          desc: "Quartier Klémat, N'Djamena, Chad",
+          desc: "Klémat District, N'Djamena, Chad",
         },
         contact: {
           title: 'Admissions Office',
@@ -327,16 +327,22 @@ export const translations = {
         connect: 'Contact',
       },
       links: {
-        quantum: 'Maternelle',
-        neural: 'Primaire',
-        ethics: 'Collège',
-        space: 'Lycée',
+        quantum: 'Preschool',
+        neural: 'Primary School',
+        ethics: 'Middle School',
+        space: 'High School',
         portal: 'Parent Portal',
         library: 'Exam Results',
         career: 'Uniforms',
         alumni: 'Alumni Network',
       },
       copyright: "Académie Royale N'Djamena. All rights reserved.",
+      address: "Klémat District, N'Djamena, Chad",
+      legal: {
+        privacy: 'Privacy Policy',
+        terms: 'Terms of Service',
+        cookies: 'Cookie Settings',
+      },
     },
   },
   fr: {
@@ -670,6 +676,12 @@ export const translations = {
         alumni: 'Anciens Élèves',
       },
       copyright: "Académie Royale N'Djamena. Tous droits réservés.",
+      address: "Quartier Klémat, N'Djamena, Tchad",
+      legal: {
+        privacy: 'Politique de Confidentialité',
+        terms: "Conditions d'Utilisation",
+        cookies: 'Paramètres des Cookies',
+      },
     },
   },
 };

@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-5 text-sm font-sans">
               <li className="flex items-start gap-3 text-muted">
                 <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                <span>Quartier Klémat, N'Djamena, Tchad</span>
+                <span>{t('footer.address')}</span>
               </li>
               <li className="flex items-center gap-3 text-muted">
                 <Phone className="w-5 h-5 text-neon shrink-0" />
@@ -133,9 +133,9 @@ export const Footer: React.FC = () => {
         >
           <p>&copy; {new Date().getFullYear()} {t('footer.copyright')}</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-foreground transition-colors">Cookie Settings</a>
+            <a href="#" className="hover:text-foreground transition-colors">{t('footer.legal.privacy')}</a>
+            <a href="#" className="hover:text-foreground transition-colors">{t('footer.legal.terms')}</a>
+            <a href="#" className="hover:text-foreground transition-colors">{t('footer.legal.cookies')}</a>
           </div>
         </motion.div>
       </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { AuthLayout } from './AuthLayout';
@@ -7,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 export const LoginPage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -27,9 +29,7 @@ export const LoginPage: React.FC = () => {
         setIsSubmitting(false);
     } else {
         console.log('Login successful');
-        // Redirect to dashboard (for now just alert or checking state)
-        alert('Login Successful!');
-        setIsSubmitting(false);
+        navigate('/student/dashboard');
     }
   };
 

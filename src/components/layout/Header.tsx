@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, GraduationCap, Search } from 'lucide-react';
+import { Menu, X, GraduationCap, Search, User } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
 import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -13,6 +14,7 @@ export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { t } = useTranslation();
+  const { user } = useAuth();
   const location = useLocation();
 
   const navItems = [
@@ -86,15 +88,25 @@ export const Header: React.FC = () => {
             <ThemeToggle />
             <LanguageSwitcher />
 
-            <Link to="/student/login">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-2.5 text-sm font-bold text-accent bg-transparent border border-accent rounded-full shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:bg-accent hover:text-white transition-all duration-300 font-heading tracking-wide"
-              >
-                {t('nav.join')}
-              </motion.button>
-            </Link>
+            {user ? (
+                <Link 
+                  to="/student/dashboard" 
+                  className="flex items-center gap-2 px-4 py-2 bg-accent text-slate-900 rounded-full font-bold hover:bg-yellow-400 transition-colors"
+                >
+                    <User className="w-4 h-4" />
+                    <span>{user.surname}</span>
+                </Link>
+            ) : (
+                <Link to="/student/login">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-2.5 text-sm font-bold text-accent bg-transparent border border-accent rounded-full shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:bg-accent hover:text-white transition-all duration-300 font-heading tracking-wide"
+                  >
+                    {t('nav.join')}
+                  </motion.button>
+                </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -160,11 +172,18 @@ export const Header: React.FC = () => {
                className="w-full max-w-xs mt-4"
             >
               <Link
-                to="/student/login"
+                to={user ? "/student/dashboard" : "/student/login"}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Button variant="primary" className="w-full">
-                  {t('nav.join')}
+                <Button variant="primary" className="w-full flex items-center justify-center gap-2">
+                  {user ? (
+                      <>
+                        <User className="w-4 h-4" />
+                        {t('nav.dashboard') || 'Mon Espace'}
+                      </>
+                  ) : (
+                      t('nav.join')
+                  )}
                 </Button>
               </Link>
             </motion.div>

@@ -9,6 +9,7 @@ interface User {
   cycle: string;
   classe: string;
   role: string;
+  phone?: string;
 }
 
 interface AuthContextType {

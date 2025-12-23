@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Section } from '../ui/Section';
-import { Blocks, BookOpen, Languages, Music, ArrowUpRight } from 'lucide-react';
+import { Blocks, BookOpen, PenTool, GraduationCap, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
 
 interface ProgramDisplay {
@@ -69,32 +69,32 @@ export const Programs: React.FC = () => {
 
   const programs: ProgramDisplay[] = [
     {
-      id: '1',
+      id: 'kindergarten',
       title: t('programs.items.kindergarten.title'),
       description: t('programs.items.kindergarten.desc'),
       duration: t('programs.items.kindergarten.duration'),
       icon: <Blocks className="w-8 h-8" />,
     },
     {
-      id: '2',
+      id: 'primary',
       title: t('programs.items.primary.title'),
       description: t('programs.items.primary.desc'),
       duration: t('programs.items.primary.duration'),
       icon: <BookOpen className="w-8 h-8" />,
     },
     {
-      id: '3',
-      title: t('programs.items.bilingual.title'),
-      description: t('programs.items.bilingual.desc'),
-      duration: t('programs.items.bilingual.duration'),
-      icon: <Languages className="w-8 h-8" />,
+      id: 'college',
+      title: t('programs.items.college.title'),
+      description: t('programs.items.college.desc'),
+      duration: t('programs.items.college.duration'),
+      icon: <PenTool className="w-8 h-8" />,
     },
     {
-      id: '4',
-      title: t('programs.items.activities.title'),
-      description: t('programs.items.activities.desc'),
-      duration: t('programs.items.activities.duration'),
-      icon: <Music className="w-8 h-8" />,
+      id: 'lycee',
+      title: t('programs.items.lycee.title'),
+      description: t('programs.items.lycee.desc'),
+      duration: t('programs.items.lycee.duration'),
+      icon: <GraduationCap className="w-8 h-8" />,
     },
   ];
 

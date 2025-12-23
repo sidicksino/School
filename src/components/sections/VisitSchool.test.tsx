@@ -11,6 +11,6 @@ describe('VisitSchool', () => {
       </LanguageProvider>
     );
     // Since we are running in JSDOM, we should be able to find elements by their role
-    expect(screen.getByRole('button', { name: /Demander/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Envoyer/i })).toBeInTheDocument();
   });
 });

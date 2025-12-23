@@ -92,23 +92,23 @@ export const translations = {
       ],
     },
     news: {
-      title: 'School News & Events',
+      title: 'Latest News & Events',
       read_more: 'Read More',
       items: [
         {
-          title: 'End of Year Ceremony',
-          date: 'June 25, 2024',
-          desc: 'Celebrating our CM2 graduates with a grand ceremony attended by officials.',
+          title: 'Back to School 2025-2026',
+          date: 'September 2025',
+          desc: 'A new adventure begins! This morning, our students returned to school in a spirit of enthusiasm and readiness.',
         },
         {
-          title: 'Science Fair 2024',
-          date: 'May 10, 2024',
-          desc: 'Our young scientists displayed incredible projects on renewable energy.',
+          title: 'Excellence Awards 2025',
+          date: 'June 2025',
+          desc: 'A moment of great intensity celebrating the hard work and success of our students and staff.',
         },
         {
-          title: 'Registration Open',
-          date: 'April 01, 2024',
-          desc: 'Admissions for the 2024-2025 academic year are now officially open.',
+          title: 'End of Year 2024-2025',
+          date: 'June 2025',
+          desc: 'Officially concluding a year rich in learning, challenges, and shared successes.',
         },
       ],
     },
@@ -185,10 +185,10 @@ export const translations = {
       ],
     },
     about_hero: {
-      headline: 'International School',
-      subheadline: 'Your future begins here',
-      description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat ad minim veniam.',
-      button: 'Admission',
+      headline: 'Académie Royale',
+      subheadline: 'Awakening • Knowledge • Excellence',
+      description: 'Founded in 2015 in Chad, Académie Royale welcomes children from kindergarten through secondary school. Our mission is to offer quality education combining knowledge, discipline, and human values.',
+      button: 'Discover Our Cycles',
     },
     about: {
       title_line1: 'A Foundation for',
@@ -247,8 +247,10 @@ export const translations = {
       title_highlight: 'Family',
       desc: 'Give your child the best start in life. Contact us to schedule a visit or pick up an enrollment form at our administration office.',
       placeholder: "Parent's Email Address",
-      button: 'Request Info Pack',
       disclaimer: 'We reply within 24 hours. Visits available Monday-Friday.',
+      success: 'Thank you! We have received your request.',
+      error: 'Something went wrong. Please try again.',
+      loading: 'Sending...',
     },
     visit: {
       hero: {
@@ -280,6 +282,9 @@ export const translations = {
         date: 'Preferred Date',
         message: 'Additional Notes',
         submit: 'Request Appointment',
+        success: 'Appointment Request Received!',
+        error: 'Please fill in all required fields.',
+        loading: 'Scheduling...',
       },
     },
     footer: {
@@ -393,19 +398,19 @@ export const translations = {
       read_more: 'Lire Plus',
       items: [
         {
-          title: "Fête de Fin d'Année",
-          date: '25 Juin 2024',
-          desc: 'Célébration de nos diplômés du CM2 avec une grande cérémonie.',
+          title: 'Rentrée Scolaire 2025-2026',
+          date: 'Septembre 2025',
+          desc: "Une nouvelle aventure commence ! Ce matin, nos élèves ont repris le chemin de l'école dans un esprit d'enthousiasme.",
         },
         {
-          title: 'Foire Scientifique 2024',
-          date: '10 Mai 2024',
-          desc: "Nos jeunes scientifiques ont exposé des projets incroyables sur l'énergie.",
+          title: 'Prix de l’Excellence 2025',
+          date: 'Juin 2025',
+          desc: "Une cérémonie grandiose pour célébrer l'excellence académique et l'engagement de nos élèves.",
         },
         {
-          title: 'Ouverture des Inscriptions',
-          date: '01 Avril 2024',
-          desc: "Les admissions pour l'année académique 2024-2025 sont officiellement ouvertes.",
+          title: 'Fin de l’année 2024-2025',
+          date: 'Juin 2025',
+          desc: "Clap de fin pour une année riche en apprentissages, en défis relevés et en succès partagés.",
         },
       ],
     },
@@ -482,10 +487,10 @@ export const translations = {
       ],
     },
     about_hero: {
-      headline: 'École Internationale',
-      subheadline: 'Votre avenir commence ici',
-      description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat ad minim veniam.',
-      button: 'Admission',
+      headline: 'Académie Royale',
+      subheadline: 'Éveil • Savoir • Excellence',
+      description: "Fondée en 2015 au Tchad, l'Académie Royale est un établissement scolaire qui accueille les enfants de la maternelle, du primaire et du secondaire. Notre mission est d'offrir une éducation de qualité, alliant savoir, discipline et valeurs humaines.",
+      button: 'Découvrir nos cycles',
     },
     about: {
       title_line1: 'Une Fondation pour',
@@ -544,8 +549,10 @@ export const translations = {
       title_highlight: 'Famille',
       desc: "Offrez à votre enfant le meilleur départ dans la vie. Contactez-nous pour planifier une visite ou retirer un dossier d'inscription.",
       placeholder: 'Email du Parent',
-      button: 'Demander le Dossier',
       disclaimer: 'Réponse sous 24h. Visites du Lundi au Vendredi.',
+      success: 'Merci ! Nous avons bien reçu votre demande.',
+      error: 'Une erreur est survenue. Veuillez réessayer.',
+      loading: 'Envoi en cours...',
     },
     visit: {
       hero: {
@@ -577,6 +584,9 @@ export const translations = {
         date: 'Date Souhaitée',
         message: 'Notes Supplémentaires',
         submit: 'Demander un Rendez-vous',
+        success: 'Demande de Rendez-vous Reçue !',
+        error: 'Veuillez remplir tous les champs.',
+        loading: 'Envoi...',
       },
     },
     footer: {

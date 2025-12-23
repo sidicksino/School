@@ -1,12 +1,13 @@
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { HelmetProvider, Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ScrollToTop } from './components/ScrollToTop';
+import { SEO } from './components/SEO';
 import { Hero } from './components/sections/Hero';
 import { Stats } from './components/sections/Stats';
 import { Programs } from './components/sections/Programs';
@@ -20,6 +21,7 @@ import { AboutHero } from './components/sections/AboutHero';
 
 const ProgramsPage = () => (
   <>
+    <SEO title="Academic Levels" description="Discover our comprehensive curriculum from Kindergarten to Primary School." />
     <LevelsHero />
     <Programs />
     <Curriculum />
@@ -42,6 +44,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const Home = () => (
   <>
+    <SEO title="Home" description="Académie Royale - Nurturing the Future Leaders of Chad with Excellence and Values." />
     <Hero />
     <Stats />
     <Welcome />
@@ -55,6 +58,7 @@ const Home = () => (
 
 const AboutPage = () => (
   <>
+    <SEO title="About Us" description="Learn about our mission, history, and the dedicated team behind Académie Royale." />
     <AboutHero />
     <About />
     <Team />
@@ -64,6 +68,7 @@ const AboutPage = () => (
 
 const ContactPage = () => (
   <>
+    <SEO title="Contact Us" description="Get in touch with Académie Royale for admissions, inquiries, or to schedule a visit." />
     <Contact />
     <FAQ />
   </>
@@ -71,6 +76,7 @@ const ContactPage = () => (
 
 const VisitPage = () => (
   <>
+    <SEO title="Visit Our Campus" description="Book a tour to see our modern facilities and meet our educators." />
     <VisitSchool />
   </>
 );
@@ -79,10 +85,6 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <HelmetProvider>
-        <Helmet>
-          <title>Académie Royale</title>
-          <meta name="description" content="A prestigious academy for the future." />
-        </Helmet>
         <LanguageProvider>
       <ThemeProvider>
         <HashRouter>

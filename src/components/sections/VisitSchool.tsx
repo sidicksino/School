@@ -1,11 +1,39 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Clock, Phone, Calendar, Mail, User, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Clock, Phone, Calendar, Mail, User, Info, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useTranslation } from '../../contexts/LanguageContext';
 
 export const VisitSchool: React.FC = () => {
   const { t } = useTranslation();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    date: '',
+    message: ''
+  });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.date) {
+        setStatus('error');
+        return;
+    }
+
+    setStatus('loading');
+    
+    // Simulate API
+    setTimeout(() => {
+        setStatus('success');
+        setFormData({ name: '', email: '', date: '', message: '' });
+    }, 1500);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+      if (status === 'error') setStatus('idle');
+  };
 
   return (
     <div className="min-h-screen pt-20 pb-16">
@@ -96,57 +124,105 @@ export const VisitSchool: React.FC = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-card rounded-2xl p-8 border border-white/10 shadow-2xl"
+          className="bg-card rounded-2xl p-8 border border-white/10 shadow-2xl relative overflow-hidden"
         >
-          <h2 className="text-2xl font-bold mb-6 text-center">{t('visit.form.title')}</h2>
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-2">
-                <label className="text-sm font-medium ml-1 block">{t('visit.form.name')}</label>
-                <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input 
-                      type="text" 
-                      className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-accent transition-colors"
-                      placeholder={t('visit.form.name')}
-                    />
-                </div>
-            </div>
+          <AnimatePresence mode="wait">
+             {status === 'success' ? (
+                <motion.div 
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center justify-center h-full py-20 text-center"
+                >
+                    <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6">
+                        <CheckCircle className="w-10 h-10 text-green-500" />
+                    </div>
+                    <h2 className="text-3xl font-bold font-heading mb-4 text-green-500">Success!</h2>
+                    <p className="text-muted mb-8 text-lg">{t('visit.form.success')}</p>
+                    <Button onClick={() => setStatus('idle')} variant="outline">Schedule Another</Button>
+                </motion.div>
+             ) : (
+                <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <h2 className="text-2xl font-bold mb-6 text-center">{t('visit.form.title')}</h2>
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium ml-1 block">{t('visit.form.name')}</label>
+                            <div className="relative">
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                                <input 
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                type="text" 
+                                className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-accent transition-colors"
+                                placeholder={t('visit.form.name')}
+                                />
+                            </div>
+                        </div>
 
-             <div className="space-y-2">
-                <label className="text-sm font-medium ml-1 block">{t('visit.form.email')}</label>
-                <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input 
-                      type="email" 
-                      className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-accent transition-colors"
-                      placeholder={t('visit.form.email')}
-                    />
-                </div>
-            </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium ml-1 block">{t('visit.form.email')}</label>
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                                <input 
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                type="email" 
+                                className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-accent transition-colors"
+                                placeholder={t('visit.form.email')}
+                                />
+                            </div>
+                        </div>
 
-            <div className="space-y-2">
-                <label className="text-sm font-medium ml-1 block">{t('visit.form.date')}</label>
-                <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input 
-                      type="date" 
-                      className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-accent transition-colors text-gray-400"
-                    />
-                </div>
-            </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium ml-1 block">{t('visit.form.date')}</label>
+                            <div className="relative">
+                                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                                <input 
+                                name="date"
+                                value={formData.date}
+                                onChange={handleChange}
+                                type="date" 
+                                className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-accent transition-colors text-gray-400"
+                                />
+                            </div>
+                        </div>
 
-            <div className="space-y-2">
-                 <label className="text-sm font-medium ml-1 block">{t('visit.form.message')}</label>
-                 <textarea 
-                    className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 px-4 h-32 resize-none focus:outline-none focus:border-accent transition-colors"
-                    placeholder={t('visit.form.message')}
-                 />
-            </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium ml-1 block">{t('visit.form.message')}</label>
+                            <textarea 
+                                name="message"
+                                value={formData.message}
+                                onChange={handleChange}
+                                className="w-full bg-secondary/10 border border-white/10 rounded-xl py-3 px-4 h-32 resize-none focus:outline-none focus:border-accent transition-colors"
+                                placeholder={t('visit.form.message')}
+                            />
+                        </div>
 
-            <Button variant="primary" className="w-full py-4 text-lg">
-                {t('visit.form.submit')}
-            </Button>
-          </form>
+                        {status === 'error' && (
+                            <div className="flex items-center gap-2 text-red-400 text-sm p-3 bg-red-400/10 rounded-lg">
+                                <AlertCircle className="w-4 h-4" />
+                                {t('visit.form.error')}
+                            </div>
+                        )}
+
+                        <Button 
+                            variant="primary" 
+                            className="w-full py-4 text-lg justify-center"
+                            disabled={status === 'loading'}
+                        >
+                            {status === 'loading' ? (
+                                <span className="flex items-center gap-2">
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                {t('visit.form.loading')}
+                                </span>
+                            ) : t('visit.form.submit')}
+                        </Button>
+                    </form>
+                </motion.div>
+             )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </div>

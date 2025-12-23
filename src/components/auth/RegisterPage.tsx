@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from '../../contexts/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { AuthLayout } from './AuthLayout';
 import { User, Phone, Lock, BookOpen, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,8 +20,8 @@ export const RegisterPage: React.FC = () => {
   });
 
   const getClassesForCycle = (cycle: string) => {
-    if (cycle === 'college') return ['6ème', '5ème', '4ème', '3ème'];
-    if (cycle === 'lycee') return ['2nde', '1ère S', '1ère L', 'Terminale D1', 'Terminale D2', 'Terminale A1', 'Terminale A2'];
+    if (cycle === 'College') return ['6ème', '5ème', '4ème', '3ème'];
+    if (cycle === 'Lycee') return ['2nde', '1ère S', '1ère L', 'Terminale D1', 'Terminale D2', 'Terminale A1', 'Terminale A2'];
     return [];
   };
 
@@ -62,18 +63,25 @@ export const RegisterPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const { register } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Call Supabase RPC via AuthContext
+    const { error } = await register(formData);
     
-    console.log('Registered:', formData);
-    setSuccess(true);
-    setIsSubmitting(false);
+    if (error) {
+        alert('Registration failed: ' + error); // Simple alert for now, could be better UI
+        setIsSubmitting(false);
+    } else {
+        console.log('Registered:', formData);
+        setSuccess(true);
+        setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -174,8 +182,8 @@ export const RegisterPage: React.FC = () => {
                     className={`${inputClasses} appearance-none cursor-pointer`}
                 >
                     <option value="">{t('auth.fields.select_cycle')}</option>
-                    <option value="college">{t('auth.cycles.college')}</option>
-                    <option value="lycee">{t('auth.cycles.lycee')}</option>
+                    <option value="College">{t('auth.cycles.college')}</option>
+                    <option value="Lycee">{t('auth.cycles.lycee')}</option>
                 </select>
             </div>
             {errors.cycle && <p className="text-red-500 text-xs mt-1 ml-1">{errors.cycle}</p>}

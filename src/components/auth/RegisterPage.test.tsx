@@ -4,8 +4,15 @@ import { LanguageProvider } from '../../contexts/LanguageContext';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect, vi } from 'vitest';
 
-// Mock scrollIntoView
-window.HTMLElement.prototype.scrollIntoView = vi.fn();
+// Mock useAuth
+const mockRegister = vi.fn();
+vi.mock('../../contexts/AuthContext', () => ({
+  useAuth: () => ({
+    register: mockRegister.mockResolvedValue({}),
+    user: null,
+    loading: false
+  })
+}));
 
 const renderWithProviders = (component: React.ReactNode) => {
   return render(

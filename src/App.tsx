@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LanguageProvider, useTranslation } from './contexts/LanguageContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -46,9 +47,11 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <HelmetProvider>
         <LanguageProvider>
-          <ThemeProvider>
-             <AppContent />
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider>
+               <AppContent />
+            </ThemeProvider>
+          </AuthProvider>
         </LanguageProvider>
       </HelmetProvider>
     </ErrorBoundary>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from '../../contexts/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { AuthLayout } from './AuthLayout';
 import { User, Lock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -13,15 +14,23 @@ export const LoginPage: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { login } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('Login:', formData);
-    // Here we would typically redirect to dashboard
-    setIsSubmitting(false);
-    alert('Mock Login Successful (Feature in progress)');
+    
+    const { error } = await login(formData.username, formData.password);
+    
+    if (error) {
+        alert('Login failed: ' + error);
+        setIsSubmitting(false);
+    } else {
+        console.log('Login successful');
+        // Redirect to dashboard (for now just alert or checking state)
+        alert('Login Successful!');
+        setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

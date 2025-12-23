@@ -25,6 +25,8 @@ import { Facilities } from './components/sections/Facilities';
 import { Curriculum } from './components/sections/Curriculum';
 import { FAQ } from './components/sections/FAQ';
 import { VisitSchool } from './components/sections/VisitSchool';
+import { RegisterPage } from './components/auth/RegisterPage';
+import { LoginPage } from './components/auth/LoginPage';
 
 // Wrapper component to ensure content isn't hidden behind fixed header on non-hero pages
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -94,6 +96,8 @@ const AppContent = () => {
                     </PageWrapper>
                   }
                 />
+                <Route path="/student/register" element={<RegisterPage />} />
+                <Route path="/student/login" element={<LoginPage />} />
                 {/* Fallback route for 404s */}
                 <Route path="*" element={<Home />} />
               </Routes>

@@ -86,7 +86,7 @@ export const Header: React.FC = () => {
             <ThemeToggle />
             <LanguageSwitcher />
 
-            <Link to="/contact">
+            <Link to="/student/login">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -160,7 +160,7 @@ export const Header: React.FC = () => {
                className="w-full max-w-xs mt-4"
             >
               <Link
-                to="/contact"
+                to="/student/login"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Button variant="primary" className="w-full">

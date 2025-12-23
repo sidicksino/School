@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LanguageProvider, useTranslation } from './contexts/LanguageContext';
@@ -60,65 +60,74 @@ const App: React.FC = () => {
   );
 };
 
+const PublicLayout = () => {
+    return (
+        <div className="min-h-screen flex flex-col font-sans bg-primary text-foreground transition-colors duration-300 overflow-x-hidden">
+            <Header />
+            <main className="flex-grow">
+                <Outlet />
+            </main>
+            <Footer />
+        </div>
+    );
+};
+
 const AppContent = () => {
   return (
         <HashRouter>
           <ScrollToTop />
-          <div className="min-h-screen flex flex-col font-sans bg-primary text-foreground transition-colors duration-300 overflow-x-hidden">
-            <Header />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route
-                  path="/programs"
-                  element={
-                    <PageWrapper>
-                      <ProgramsPage />
-                    </PageWrapper>
-                  }
-                />
-                <Route
-                  path="/about"
-                  element={
-                    <PageWrapper>
-                      <AboutPage />
-                    </PageWrapper>
-                  }
-                />
-                <Route
-                  path="/contact"
-                  element={
-                    <PageWrapper>
-                      <ContactPage />
-                    </PageWrapper>
-                  }
-                />
-                <Route
-                  path="/visit"
-                  element={
-                    <PageWrapper>
-                      <VisitPage />
-                    </PageWrapper>
-                  }
-                />
-                <Route path="/student/register" element={<RegisterPage />} />
-                <Route path="/student/login" element={<LoginPage />} />
+            <Routes>
+                {/* Public Routes (Wrapped in Main Layout) */}
+                <Route element={<PublicLayout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="/programs"
+                        element={
+                            <PageWrapper>
+                                <ProgramsPage />
+                            </PageWrapper>
+                        }
+                    />
+                    <Route
+                        path="/about"
+                        element={
+                            <PageWrapper>
+                                <AboutPage />
+                            </PageWrapper>
+                        }
+                    />
+                    <Route
+                        path="/contact"
+                        element={
+                            <PageWrapper>
+                                <ContactPage />
+                            </PageWrapper>
+                        }
+                    />
+                    <Route
+                        path="/visit"
+                        element={
+                            <PageWrapper>
+                                <VisitPage />
+                            </PageWrapper>
+                        }
+                    />
+                    <Route path="/student/register" element={<RegisterPage />} />
+                    <Route path="/student/login" element={<LoginPage />} />
+                    {/* Fallback for 404s inside public layout */}
+                    <Route path="*" element={<Home />} />
+                </Route>
+
+                {/* Dashboard Routes (Standalone Layout) */}
                 <Route 
-                  path="/student/dashboard" 
-                  element={
-                    <ProtectedRoute>
-                      <PageWrapper>
-                        <DashboardPage />
-                      </PageWrapper>
-                    </ProtectedRoute>
-                  } 
+                    path="/student/dashboard" 
+                    element={
+                        <ProtectedRoute>
+                             <DashboardPage />
+                        </ProtectedRoute>
+                    } 
                 />
-                {/* Fallback route for 404s */}
-                <Route path="*" element={<Home />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+            </Routes>
         </HashRouter>
   );
 };

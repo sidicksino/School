@@ -1,83 +1,27 @@
-
 import React from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useTranslation } from '../../contexts/LanguageContext';
-import { LogOut, User, BookOpen, GraduationCap, Phone } from 'lucide-react';
+import { DashboardLayout } from '../layout/DashboardLayout';
+import { WelcomeBanner } from '../dashboard/WelcomeBanner';
+import { StatsCards } from '../dashboard/StatsCards';
+import { AttendanceChart } from '../dashboard/AttendanceChart';
+import { GenericTable } from '../dashboard/GenericTable';
 
 export const DashboardPage: React.FC = () => {
-    const { user, logout } = useAuth();
-    const { t } = useTranslation();
-
-    if (!user) return null;
-
     return (
-        <div className="min-h-screen bg-background pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-                {/* Header Section */}
-                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden mb-8">
-                    <div className="bg-accent h-32 relative">
-                        <div className="absolute -bottom-12 left-8">
-                            <div className="w-24 h-24 bg-white dark:bg-slate-800 rounded-full p-2 shadow-lg">
-                                <div className="w-full h-full bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center">
-                                    <User className="w-10 h-10 text-muted" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="pt-16 pb-6 px-8 flex justify-between items-start">
-                        <div>
-                            <h1 className="text-2xl font-bold text-foreground">{user.full_name}</h1>
-                            <p className="text-muted">@{user.surname}</p>
-                        </div>
-                        <button 
-                            onClick={logout}
-                            className="flex items-center gap-2 px-4 py-2 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
-                        >
-                            <LogOut className="w-4 h-4" />
-                            <span>{t('auth.logout')}</span>
-                        </button>
-                    </div>
+        <DashboardLayout>
+            <WelcomeBanner />
+            <StatsCards />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                {/* Chart takes up 1 column (or more depending on pref, image shows side by side) */}
+                 <div className="lg:col-span-1">
+                    <AttendanceChart />
                 </div>
 
-                {/* Info Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Academic Info */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6">
-                        <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                            <GraduationCap className="w-5 h-5 text-accent" />
-                            {t('dashboard.academic_info')}
-                        </h2>
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">{t('dashboard.cycle')}</span>
-                                <span className="font-bold text-foreground">{user.cycle}</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">{t('dashboard.classe')}</span>
-                                <span className="font-bold text-foreground">{user.classe}</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">{t('dashboard.role')}</span>
-                                <span className="font-bold text-accent capitalize">{user.role}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Contact Info */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6">
-                        <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                            <Phone className="w-5 h-5 text-accent" />
-                            {t('dashboard.contact_info')}
-                        </h2>
-                        <div className="space-y-4">
-                             <div className="flex items-center justify-between p-3 bg-secondary/10 rounded-xl">
-                                <span className="text-muted">{t('dashboard.phone')}</span>
-                                <span className="font-bold text-foreground min-h-[1.5rem]">{user.phone || t('dashboard.not_provided')}</span>
-                            </div>
-                        </div>
-                    </div>
+                {/* Table takes up remaining space */}
+                <div className="lg:col-span-2">
+                    <GenericTable />
                 </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 };

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, GraduationCap } from 'lucide-react';
+import { Menu, X, GraduationCap, Search } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { SearchModal } from '../ui/SearchModal';
 import { useTranslation } from '../../contexts/LanguageContext';
 
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -72,6 +74,13 @@ export const Header: React.FC = () => {
             })}
 
             <div className="h-6 w-px bg-foreground/20 mx-2" />
+            
+            <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 text-muted hover:text-accent transition-colors rounded-full hover:bg-secondary/50"
+            >
+                <Search className="w-5 h-5" />
+            </button>
 
             <ThemeToggle />
             <LanguageSwitcher />
@@ -89,6 +98,12 @@ export const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-4 z-50">
+            <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="text-foreground hover:text-accent transition-colors"
+            >
+                <Search className="w-5 h-5" />
+            </button>
             <ThemeToggle />
             <LanguageSwitcher />
             <button
@@ -100,6 +115,8 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </motion.header>
+
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>

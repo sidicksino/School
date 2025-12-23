@@ -93,6 +93,9 @@ export const translations = {
     },
     news: {
       title: 'School News',
+      stories: 'Our Stories',
+      view_all: 'View All News',
+      badge: 'NEWS',
       read_more: 'Read Article',
       items: [
         {
@@ -159,7 +162,7 @@ export const translations = {
       items: [
         { subject: 'Scientific Stream', desc: 'Mathematics, Physics-Chemistry, Biology (S Series)' },
         { subject: 'Literary Stream', desc: 'Philosophy, Languages, History-Geo (A Series)' },
-        { subject: 'Languages', desc: 'French, Arabic (Instruction), English' },
+        { subject: 'Languages', desc: 'French (Instruction), Arabic, English' },
         { subject: 'Civic Education', desc: 'Values, Citizenship, National History' },
       ],
     },
@@ -432,6 +435,9 @@ export const translations = {
     },
     news: {
       title: 'Actualités',
+      stories: 'Nos Histoires',
+      view_all: 'Toute l\'Actualité',
+      badge: 'INFO',
       read_more: 'Lire Plus',
       items: [
         {
@@ -498,7 +504,7 @@ export const translations = {
       items: [
         { subject: 'Série Scientifique', desc: 'Maths, PC, SVT (Série D/C) pour le Lycée' },
         { subject: 'Série Littéraire', desc: 'Philo, Langues, Hist-Géo (Série A)' },
-        { subject: 'Langues', desc: 'Français, Arabe (Langues d\'enseignement), Anglais' },
+        { subject: 'Langues', desc: 'Français (Langues d\'enseignement), Arabe, Anglais' },
         { subject: 'Éducation Civique', desc: 'Morale, Citoyenneté et Histoire du Tchad' },
       ],
     },

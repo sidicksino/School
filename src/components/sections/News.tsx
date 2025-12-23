@@ -5,6 +5,7 @@ import { Calendar, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
 
 const NewsCard: React.FC<{ item: { title: string; date: string; desc: string }, index: number }> = ({ item, index }) => {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,7 +26,7 @@ const NewsCard: React.FC<{ item: { title: string; date: string; desc: string }, 
         </div>
         
         <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold shadow-sm">
-            NEWS
+            {t('news.badge')}
         </div>
       </div>
 
@@ -43,7 +44,7 @@ const NewsCard: React.FC<{ item: { title: string; date: string; desc: string }, 
       </p>
 
       <div className="flex items-center gap-2 text-sm font-bold text-foreground group-hover:text-accent group-hover:translate-x-1 transition-all">
-         Read Article <ArrowRight className="w-4 h-4" />
+         {t('news.read_more')} <ArrowRight className="w-4 h-4" />
       </div>
     </motion.div>
   );
@@ -60,7 +61,7 @@ export const News: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
           <div className="max-w-xl">
-             <span className="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">Our Stories</span>
+             <span className="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">{t('news.stories')}</span>
              <h2 className="text-4xl md:text-5xl font-heading font-bold text-foreground">
                 {t('news.title')}
              </h2>
@@ -70,7 +71,7 @@ export const News: React.FC = () => {
             whileTap={{ scale: 0.95 }}
             className="px-6 py-3 rounded-full border border-foreground/10 hover:border-accent hover:text-accent transition-all font-semibold flex items-center gap-2 group bg-primary/50 backdrop-blur-sm"
           >
-             View All News <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+             {t('news.view_all')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </motion.button>
         </div>
 

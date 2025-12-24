@@ -31,8 +31,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = localStorage.getItem('school_user');
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+         // Basic validation to ensure it's a valid user object
+        if (parsedUser && typeof parsedUser === 'object' && parsedUser.id) {
+            setUser(parsedUser);
+        } else {
+            console.warn('Invalid user data in localStorage, clearing...');
+            localStorage.removeItem('school_user');
+        }
       } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
         localStorage.removeItem('school_user');
       }
     }

@@ -26,5 +26,8 @@ export default defineConfig(({ mode }) => {
       setupFiles: './src/test/setup.ts',
       include: ['src/**/*.test.{ts,tsx}'],
     },
+    build: {
+      minify: false,
+    },
   };
 });

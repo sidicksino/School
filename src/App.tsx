@@ -14,6 +14,7 @@ import { Stats } from './components/sections/Stats';
 import { Schedule } from './components/student/Schedule';
 import { Courses } from './components/student/Courses';
 import { Profile } from './components/student/Profile';
+import { GradesPage } from './components/student/GradesPage';
 import { Programs } from './components/sections/Programs';
 import { About } from './components/sections/About';
 import { Contact } from './components/sections/Contact';
@@ -159,6 +160,14 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute allowedRoles={['student']}>
                              <Profile />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/student/grades" 
+                    element={
+                        <ProtectedRoute allowedRoles={['student']}>
+                             <GradesPage />
                         </ProtectedRoute>
                     } 
                 />

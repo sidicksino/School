@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { User, BookOpen, GraduationCap, Award } from 'lucide-react';
+import { User, BookOpen, GraduationCap, FileText, AlertCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 
-interface StatsState {
-  subjectsCount: number;
-  gradesCount: number;
-  average: number | string;
+interface StatsData {
+    total_subjects: number;
+    total_grades: number;
+    average: number;
+    absences: number;
 }
 
 export const StatsCards: React.FC = () => {
     const { user } = useAuth();
-    const [stats, setStats] = useState<StatsState>({
-        subjectsCount: 0,
-        gradesCount: 0,
-        average: 0
+    const [stats, setStats] = useState<StatsData>({
+        total_subjects: 0,
+        total_grades: 0,
+        average: 0,
+        absences: 0
     });
     const [loading, setLoading] = useState(true);
 
@@ -26,27 +28,19 @@ export const StatsCards: React.FC = () => {
 
     const fetchStats = async () => {
         try {
-            // 1. Fetch Average
-            const { data: avgData, error: avgError } = await supabase
-                .rpc('get_student_average', { p_student_id: user?.id });
-            
-            if (avgError) console.error('Error fetching average:', avgError);
+            // Call the RPC defined in grading_schema.sql
+            // Defaulting to Term 1 for the dashboard snapshot
+            const { data, error } = await supabase
+                .rpc('get_student_stats', { 
+                    p_student_id: user?.id,
+                    p_term: 1 
+                });
 
-            // 2. Fetch Grades to count total grades and unique subjects
-            const { data: gradesData, error: gradesError } = await supabase
-                .rpc('get_student_grades', { p_student_id: user?.id });
+            if (error) throw error;
 
-            if (gradesError) console.error('Error fetching grades:', gradesError);
-
-            // Calculate metrics
-            const gradesList = gradesData || [];
-            const uniqueSubjects = new Set(gradesList.map((g: any) => g.subject_code)).size;
-
-            setStats({
-                average: avgData !== null ? avgData : 0,
-                gradesCount: gradesList.length,
-                subjectsCount: uniqueSubjects
-            });
+            if (data) {
+                setStats(data);
+            }
 
         } catch (err) {
             console.error('Error fetching stats:', err);
@@ -58,31 +52,27 @@ export const StatsCards: React.FC = () => {
     const cards = [
         {
             label: 'Total Subjects',
-            value: loading ? '-' : stats.subjectsCount.toString().padStart(2, '0'),
+            value: loading ? '-' : stats.total_subjects.toString(),
             icon: BookOpen,
-            color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600',
-            iconBg: 'bg-purple-500',
+            iconBg: 'bg-blue-500',
         },
         {
             label: 'Total Grades',
-            value: loading ? '-' : stats.gradesCount.toString().padStart(2, '0'),
-            icon: GraduationCap,
-            color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600',
-            iconBg: 'bg-orange-500',
+            value: loading ? '-' : stats.total_grades.toString(),
+            icon: FileText,
+            iconBg: 'bg-green-500',
         },
         {
             label: 'Absences',
-            value: '02', // Still static as we don't have this table yet
-            icon: User, 
-            color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600',
-            iconBg: 'bg-yellow-500', 
+            value: loading ? '-' : stats.absences.toString(),
+            icon: AlertCircle,
+            iconBg: 'bg-pink-500',
         },
         {
             label: 'Average',
             value: loading ? '-' : `${stats.average}/20`,
-            icon: Award,
-            color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600',
-            iconBg: 'bg-blue-500',
+            icon: GraduationCap,
+            iconBg: 'bg-orange-500',
         },
     ];
 

@@ -11,6 +11,8 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { SEO } from './components/SEO';
 import { Hero } from './components/sections/Hero';
 import { Stats } from './components/sections/Stats';
+import { Schedule } from './components/student/Schedule';
+import { Courses } from './components/student/Courses';
 import { Programs } from './components/sections/Programs';
 import { About } from './components/sections/About';
 import { Contact } from './components/sections/Contact';
@@ -124,6 +126,22 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute>
                              <DashboardPage />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/student/schedule" 
+                    element={
+                        <ProtectedRoute>
+                             <Schedule />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/student/courses" 
+                    element={
+                        <ProtectedRoute>
+                             <Courses />
                         </ProtectedRoute>
                     } 
                 />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -11,9 +11,9 @@ export const Sidebar: React.FC = () => {
 
     const menuItems = [
         { icon: LayoutDashboard, label: t('nav.dashboard') || 'Dashboard', path: '/student/dashboard' },
-        { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
+        { icon: Clock, label: 'Schedule', path: '/student/schedule' },
         { icon: BookOpen, label: 'Courses', path: '/student/courses' },
-        { icon: User, label: 'Profile', path: '/student/profile' },
+        { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
         { icon: Settings, label: 'Settings', path: '/student/settings' },
     ];
 

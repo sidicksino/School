@@ -87,20 +87,20 @@ export const StatsCards: React.FC = () => {
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
             {cards.map((stat, idx) => {
                 const Icon = stat.icon;
                 return (
                     <div 
                         key={idx} 
-                        className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4"
+                        className="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-4 text-center md:text-left"
                     >
-                         <div className={`${stat.iconBg} w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg`}>
-                            <Icon className="w-6 h-6" />
+                         <div className={`${stat.iconBg} w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white shadow-lg shrink-0`}>
+                            <Icon className="w-5 h-5 md:w-6 md:h-6" />
                          </div>
-                         <div>
-                             <p className="text-slate-500 text-sm mb-1">{stat.label}</p>
-                             <h3 className="text-2xl font-bold text-slate-800 dark:text-white font-heading">{stat.value}</h3>
+                         <div className="min-w-0">
+                             <p className="text-slate-500 text-xs md:text-sm mb-0.5 md:mb-1 truncate">{stat.label}</p>
+                             <h3 className="text-lg md:text-2xl font-bold text-slate-800 dark:text-white font-heading truncate">{stat.value}</h3>
                          </div>
                     </div>
                 );

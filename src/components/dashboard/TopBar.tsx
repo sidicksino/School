@@ -10,7 +10,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleSidebar }) => {
     const { user } = useAuth();
 
     return (
-        <div className="h-20 bg-transparent flex items-center justify-between px-0 md:px-8 py-4">
+        <div className="sticky top-0 z-30 bg-[#F3F4FF]/80 dark:bg-slate-900/80 backdrop-blur-md h-20 flex items-center justify-between px-4 md:px-8 py-4 transition-all duration-300">
             {/* Title & Mobile Toggle */}
             <div className="flex items-center gap-4">
                 <button 

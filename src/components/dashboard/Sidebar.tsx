@@ -14,13 +14,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const { logout } = useAuth();
     const location = useLocation();
 
-    const menuItems = [
+    const { user } = useAuth();
+
+    let menuItems = [
         { icon: LayoutDashboard, label: t('nav.dashboard') || 'Dashboard', path: '/student/dashboard' },
-        { icon: Clock, label: 'Schedule', path: '/student/schedule' },
-        { icon: BookOpen, label: 'Courses', path: '/student/courses' },
-        { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
-        { icon: Settings, label: 'Settings', path: '/student/settings' },
     ];
+
+    if (user?.role === 'teacher') {
+        menuItems = [
+             { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+             { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+             { icon: GraduationCap, label: 'Grade Entry', path: '/teacher/grades' },
+             { icon: Settings, label: 'Settings', path: '/student/profile' },
+        ];
+    } else if (user?.role === 'admin') {
+         menuItems = [
+             { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+             { icon: Settings, label: 'System', path: '/admin/settings' },
+        ];
+    } else {
+        // Default Student
+        menuItems = [
+            { icon: LayoutDashboard, label: t('nav.dashboard') || 'Dashboard', path: '/dashboard' },
+            { icon: Clock, label: 'Schedule', path: '/student/schedule' },
+            { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+            { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
+            { icon: Settings, label: 'Settings', path: '/student/profile' },
+        ];
+    }
 
     return (
         <div className={`h-screen w-64 bg-[#4D44B5] text-white flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${

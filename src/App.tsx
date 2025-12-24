@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { HashRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LanguageProvider, useTranslation } from './contexts/LanguageContext';
@@ -31,8 +31,9 @@ import { FAQ } from './components/sections/FAQ';
 import { VisitSchool } from './components/sections/VisitSchool';
 import { RegisterPage } from './components/auth/RegisterPage';
 import { LoginPage } from './components/auth/LoginPage';
-import { DashboardPage } from './components/student/DashboardPage';
+import { DashboardPage } from './components/dashboard/DashboardPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+// TeacherDashboard and AdminDashboard are no longer needed as separate routes
 
 // Wrapper component to ensure content isn't hidden behind fixed header on non-hero pages
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -122,18 +123,25 @@ const AppContent = () => {
                 </Route>
 
                 {/* Dashboard Routes (Standalone Layout) */}
+                {/* Unified Dashboard Route */}
                 <Route 
-                    path="/student/dashboard" 
+                    path="/dashboard" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
                              <DashboardPage />
                         </ProtectedRoute>
                     } 
                 />
+
+                {/* Redirects for legacy routes if needed, or just let them 404/redirect */}
+                <Route path="/student/dashboard" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/teacher/dashboard" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/admin/dashboard" element={<Navigate to="/dashboard" replace />} />
+
                 <Route 
                     path="/student/schedule" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute allowedRoles={['student']}>
                              <Schedule />
                         </ProtectedRoute>
                     } 
@@ -141,7 +149,7 @@ const AppContent = () => {
                 <Route 
                     path="/student/courses" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute allowedRoles={['student']}>
                              <Courses />
                         </ProtectedRoute>
                     } 
@@ -149,11 +157,13 @@ const AppContent = () => {
                 <Route 
                     path="/student/profile" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute allowedRoles={['student']}>
                              <Profile />
                         </ProtectedRoute>
                     } 
                 />
+
+                {/* Routes cleaned up: Teacher and Admin dashboards are unified at /dashboard */}
             </Routes>
         </HashRouter>
   );

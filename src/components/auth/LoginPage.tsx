@@ -22,14 +22,15 @@ export const LoginPage: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const { error } = await login(formData.username, formData.password);
+    const { data, error } = await login(formData.username, formData.password);
     
     if (error) {
         alert(t('auth.login.failed') + error);
         setIsSubmitting(false);
-    } else {
-        console.log('Login successful');
-        navigate('/student/dashboard');
+    } else if (data) {
+        console.log('Login successful', data.role);
+        // Unified redirect
+        navigate('/dashboard');
     }
   };
 

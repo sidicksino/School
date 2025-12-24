@@ -15,7 +15,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (surname: string, password: string) => Promise<{ error?: string }>;
+  login: (surname: string, password: string) => Promise<{ data?: User, error?: string }>;
   register: (data: any) => Promise<{ error?: string }>;
   logout: () => void;
 }
@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.success && data.student) {
         setUser(data.student);
         localStorage.setItem('school_user', JSON.stringify(data.student));
-        return { };
+        return { data: data.student };
       }
       
       return { error: 'Invalid response from server' };

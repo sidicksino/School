@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock } from 'lucide-react';
+import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock, X } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
     const { logout } = useAuth();
     const location = useLocation();
@@ -18,10 +23,12 @@ export const Sidebar: React.FC = () => {
     ];
 
     return (
-        <div className="h-screen w-64 bg-[#4D44B5] text-white flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300">
+        <div className={`h-screen w-64 bg-[#4D44B5] text-white flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${
+            isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+        }`}>
             {/* Logo Area */}
             {/* Logo Area */}
-            <div className="p-8 flex items-center gap-3">
+            <div className="p-8 flex items-center justify-between">
                 <Link to="/" className="flex items-center gap-3 group">
                     <div className="p-2 bg-gradient-to-tr from-accent to-yellow-600 rounded-lg group-hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300">
                         <GraduationCap className="w-6 h-6 text-slate-900" />
@@ -30,6 +37,14 @@ export const Sidebar: React.FC = () => {
                         Académie <span className="text-accent">Royale</span>
                     </span>
                 </Link>
+                
+                {/* Mobile Close Button */}
+                <button 
+                    onClick={onClose}
+                    className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
+                >
+                    <X className="w-6 h-6" />
+                </button>
             </div>
 
             {/* Navigation */}

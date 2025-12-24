@@ -1,16 +1,28 @@
 import React from 'react';
-import { Search, Bell, Mail, ChevronDown } from 'lucide-react';
+import { Search, Bell, Mail, ChevronDown, Menu } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-export const TopBar: React.FC = () => {
+interface TopBarProps {
+    onToggleSidebar: () => void;
+}
+
+export const TopBar: React.FC<TopBarProps> = ({ onToggleSidebar }) => {
     const { user } = useAuth();
 
     return (
-        <div className="h-20 bg-transparent flex items-center justify-between px-8 py-4">
-            {/* Title */}
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-white font-heading">
-                Dashboard
-            </h2>
+        <div className="h-20 bg-transparent flex items-center justify-between px-0 md:px-8 py-4">
+            {/* Title & Mobile Toggle */}
+            <div className="flex items-center gap-4">
+                <button 
+                    onClick={onToggleSidebar}
+                    className="md:hidden p-2 bg-white dark:bg-slate-800 rounded-xl text-slate-600 dark:text-white shadow-sm hover:text-[#4D44B5] transition-colors"
+                >
+                    <Menu className="w-6 h-6" />
+                </button>
+                <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-white font-heading truncate">
+                    Dashboard
+                </h2>
+            </div>
 
             {/* Right Section */}
             <div className="flex items-center gap-6">

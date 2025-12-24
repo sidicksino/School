@@ -54,12 +54,14 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleSidebar }) => {
                         <p className="text-sm font-bold text-slate-700 dark:text-white leading-tight">
                             {user?.full_name}
                         </p>
-                        <p className="text-xs text-slate-400">Student</p>
+                        <p className="text-xs text-slate-400 capitalize">
+                            {user?.role} {user?.role === 'student' && user?.classe ? `• ${user?.classe}` : ''}
+                        </p>
                     </div>
                     <div className="w-10 h-10 bg-slate-200 rounded-full overflow-hidden">
                         {/* Avatar Placeholder */}
                         <div className="w-full h-full bg-[#4D44B5] flex items-center justify-center text-white font-bold">
-                            {user?.surname?.substring(0,2).toUpperCase()}
+                            {user?.full_name ? user.full_name.charAt(0).toUpperCase() : 'U'}
                         </div>
                     </div>
                 </div>

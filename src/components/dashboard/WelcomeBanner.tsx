@@ -7,9 +7,11 @@ export const WelcomeBanner: React.FC = () => {
     return (
         <div className="bg-[#4D44B5] rounded-3xl p-8 mb-8 relative overflow-hidden flex justify-between items-center text-white">
             <div className="z-10 relative">
-                <p className="opacity-80 mb-1">September 4, 2023</p>
+                <p className="opacity-80 mb-1">
+                    {new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </p>
                 <h2 className="text-3xl font-bold mb-4 font-heading">
-                    Welcome back, {user?.full_name?.split(' ')[0]}!
+                    Welcome back, {user?.full_name?.split(' ')[0] || 'Student'}!
                 </h2>
                 <p className="max-w-md opacity-90 mb-6">
                     Always stay updated in your student portal. Check your grades, schedule and announcements here.

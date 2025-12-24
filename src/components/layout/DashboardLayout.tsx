@@ -26,9 +26,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             />
 
             {/* Main Content */}
-            <main className="flex-1 w-full md:ml-64 p-4 md:p-8 transition-all duration-300">
+            <main className="flex-1 w-full md:ml-64 flex flex-col min-h-screen transition-all duration-300">
                 <TopBar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-                <div className="mt-8">
+                <div className="flex-1 p-4 md:p-8">
                     {children}
                 </div>
             </main>

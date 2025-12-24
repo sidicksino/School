@@ -13,6 +13,7 @@ import { Hero } from './components/sections/Hero';
 import { Stats } from './components/sections/Stats';
 import { Schedule } from './components/student/Schedule';
 import { Courses } from './components/student/Courses';
+import { Profile } from './components/student/Profile';
 import { Programs } from './components/sections/Programs';
 import { About } from './components/sections/About';
 import { Contact } from './components/sections/Contact';
@@ -142,6 +143,14 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute>
                              <Courses />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/student/profile" 
+                    element={
+                        <ProtectedRoute>
+                             <Profile />
                         </ProtectedRoute>
                     } 
                 />

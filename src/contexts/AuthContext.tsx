@@ -22,8 +22,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,16 +41,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (surname: string, password: string) => {
     try {
-      const response = await fetch(`${API_URL}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: surname, password }),
+      // Call Supabase RPC 'login_student'
+      const { data, error } = await supabase.rpc('login_student', {
+        p_surname: surname,
+        p_password: password
       });
 
-      const data = await response.json();
+      if (error) throw error;
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      // RPC returns { success: true, student: { ... } } or { error: '...' }
+      if (data.error) {
+         throw new Error(data.error);
       }
 
       if (data.success && data.student) {
@@ -70,16 +69,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (formData: any) => {
     try {
-        const response = await fetch(`${API_URL}/api/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
+        // Call Supabase RPC 'register_student'
+        const { data, error } = await supabase.rpc('register_student', {
+            p_surname: formData.surname,
+            p_full_name: formData.fullname,
+            p_cycle: formData.cycle,
+            p_classe: formData.classe,
+            p_phone: formData.phone,
+            p_password: formData.password,
+            p_terms: formData.terms
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Registration failed');
+        if (error) throw error;
+        
+        if (data.error) {
+            throw new Error(data.error);
         }
 
         return { };

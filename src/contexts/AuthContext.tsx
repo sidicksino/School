@@ -27,63 +27,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Initialize session from Supabase
-    const initializeAuth = async () => {
+    // Check local storage for session on mount
+    const storedUser = localStorage.getItem('school_user');
+    if (storedUser) {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) throw error;
-
-        if (session) {
-          // If we have a session, validate the user data
-          const storedUser = localStorage.getItem('school_user');
-          if (storedUser) {
-            try {
-              const parsedUser = JSON.parse(storedUser);
-              if (parsedUser && parsedUser.id) {
-                setUser(parsedUser);
-              } else {
-                // Session exists but local data is corrupt -> fetch profile or force login if critical
-                console.warn('Session valid but local user data missing/corrupt');
-                // Optional: fetch user profile from DB here if needed
-              }
-            } catch {
-               // Ignore JSON parse errors
-            }
-          }
+        const parsedUser = JSON.parse(storedUser);
+         // Basic validation to ensure it's a valid user object
+        if (parsedUser && typeof parsedUser === 'object' && parsedUser.id) {
+            setUser(parsedUser);
+        } else {
+            console.warn('Invalid user data in localStorage, clearing...');
+            localStorage.removeItem('school_user');
         }
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        // Force cleanup if session check fails hard
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
         localStorage.removeItem('school_user');
-        setUser(null);
-      } finally {
-        setLoading(false);
       }
-    };
-
-    initializeAuth();
-
-    // 2. Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state change:', event);
-      
-      if (event === 'SIGNED_OUT') {
-        setUser(null);
-        localStorage.removeItem('school_user');
-        localStorage.removeItem('sb-access-token'); // Clear Supabase internal token if present
-        localStorage.removeItem('sb-refresh-token');
-      } else if (event === 'SIGNED_IN' && session) {
-         // We usually set user in login() but this catches external/auto logins
-         // Ideally fetch fresh profile here if user is null
-      } else if (event === 'TOKEN_REFRESHED') {
-         // Session refreshed, all good
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    }
+    setLoading(false);
   }, []);
 
   const login = async (surname: string, password: string) => {
@@ -101,9 +62,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
          throw new Error(data.error);
       }
 
+      
       if (data.success && data.student) {
         setUser(data.student);
-        // We still set this for synchronous availability, but onAuthStateChange is the source of truth
         localStorage.setItem('school_user', JSON.stringify(data.student));
         return { data: data.student };
       }

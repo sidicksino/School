@@ -32,6 +32,7 @@ import { FAQ } from './components/sections/FAQ';
 import { VisitSchool } from './components/sections/VisitSchool';
 import { RegisterPage } from './components/auth/RegisterPage';
 import { LoginPage } from './components/auth/LoginPage';
+import { ResetAuth } from './components/auth/ResetAuth';
 import { DashboardPage } from './components/dashboard/DashboardPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 // TeacherDashboard and AdminDashboard are no longer needed as separate routes
@@ -119,6 +120,7 @@ const AppContent = () => {
                     />
                     <Route path="/student/register" element={<RegisterPage />} />
                     <Route path="/student/login" element={<LoginPage />} />
+                    <Route path="/reset-auth" element={<ResetAuth />} />
                     {/* Fallback for 404s inside public layout */}
                     <Route path="*" element={<Home />} />
                 </Route>

@@ -52,19 +52,19 @@ export const StatsCards: React.FC = () => {
     const cards = [
         {
             label: 'Total Subjects',
-            value: loading ? '-' : stats.total_subjects.toString(),
+            value: loading ? '-' : (stats.total_subjects?.toString() || '0'),
             icon: BookOpen,
             iconBg: 'bg-blue-500',
         },
         {
             label: 'Total Grades',
-            value: loading ? '-' : stats.total_grades.toString(),
+            value: loading ? '-' : (stats.total_grades?.toString() || '0'),
             icon: FileText,
             iconBg: 'bg-green-500',
         },
         {
             label: 'Absences',
-            value: loading ? '-' : stats.absences.toString(),
+            value: loading ? '-' : (stats.absences?.toString() || '0'),
             icon: AlertCircle,
             iconBg: 'bg-pink-500',
         },

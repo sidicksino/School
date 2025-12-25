@@ -62,6 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
          throw new Error(data.error);
       }
 
+      
       if (data.success && data.student) {
         setUser(data.student);
         localStorage.setItem('school_user', JSON.stringify(data.student));

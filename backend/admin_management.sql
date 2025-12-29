@@ -18,8 +18,8 @@ begin
   -- Count Teachers
   select count(*) into v_total_teachers from public.students where role = 'teacher';
   
-  -- Total Users
-  v_total_users := v_total_students + v_total_teachers;
+  -- Total Users (Includes Admins, Teachers, Students)
+  select count(*) into v_total_users from public.students;
   
   -- Count Active Classes (distinct classes from students or schedule)
   select count(distinct classe) into v_classes_count from public.students;

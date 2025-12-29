@@ -305,21 +305,43 @@ security definer
 as $$
 declare
   v_classe text;
+  v_has_config boolean;
+  v_has_schedule boolean;
 begin
   -- Get user's class
   select classe into v_classe from public.students where id = p_student_id;
   
+  -- Check Strategy 1
+  select exists(select 1 from public.class_subjects where class_name = v_classe) into v_has_config;
+  
+  if v_has_config then
+      return query
+      select s.id, s.name, s.code, cs.coefficient, cs.category
+      from public.class_subjects cs
+      join public.subjects s on cs.subject_id = s.id
+      where cs.class_name = v_classe
+      order by cs.category, s.name;
+      return; -- Exit
+  end if;
+
+  -- Check Strategy 2
+  select exists(select 1 from public.schedule where classe = v_classe) into v_has_schedule;
+  
+  if v_has_schedule then
+      return query
+      select distinct s.id, s.name, s.code, 1 as coefficient, 'General' as category
+      from public.schedule sc
+      join public.subjects s on sc.subject_id = s.id
+      where sc.classe = v_classe
+      order by s.name;
+      return; -- Exit
+  end if;
+
+  -- Strategy 3 (Fallback)
   return query
-  select 
-    s.id,
-    s.name,
-    s.code,
-    cs.coefficient,
-    cs.category
-  from public.class_subjects cs
-  join public.subjects s on cs.subject_id = s.id
-  where cs.class_name = v_classe
-  order by cs.category, s.name;
+  select s.id, s.name, s.code, 1 as coefficient, 'General' as category
+  from public.subjects s
+  order by s.name;
 end;
 $$;
 

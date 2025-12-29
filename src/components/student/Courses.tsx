@@ -29,7 +29,11 @@ export const Courses: React.FC = () => {
             const { data, error } = await supabase
                 .rpc('get_student_courses', { p_student_id: user?.id });
             
-            if (error) throw error;
+            if (error) {
+                console.error('RPC Error:', error);
+                alert(`Error fetching courses: ${error.message}`);
+                throw error;
+            }
             setCourses(data || []);
         } catch (error) {
             console.error('Error fetching courses:', error);
@@ -64,6 +68,12 @@ export const Courses: React.FC = () => {
 
                 {loading ? (
                     <div className="text-center py-10 text-slate-400">Loading curriculum...</div>
+                ) : courses.length === 0 ? (
+                     <div className="text-center py-20 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600">
+                        <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                        <p className="text-slate-500 font-medium">No courses found for your class.</p>
+                        <p className="text-slate-400 text-sm mt-1">Please contact your administrator.</p>
+                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courses.map((course) => {
@@ -79,7 +89,7 @@ export const Courses: React.FC = () => {
                                             ? 'bg-blue-100 text-blue-600' 
                                             : 'bg-pink-100 text-pink-600'
                                         }`}>
-                                            {course.category}
+                                            {course.category || 'General'}
                                         </span>
                                     </div>
                                     

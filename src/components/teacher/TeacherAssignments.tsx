@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '../layout/DashboardLayout';
 import { supabase } from '../../lib/supabase';
-import { BookOpen, Calendar, Save, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
+import { BookOpen, Calendar, Save, CheckCircle, AlertCircle, Trash2, Paperclip, UploadCloud } from 'lucide-react';
 
 export const TeacherAssignments: React.FC = () => {
     const [classes, setClasses] = useState<string[]>([]);
@@ -13,6 +13,7 @@ export const TeacherAssignments: React.FC = () => {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
     const [dueDate, setDueDate] = useState('');
+    const [file, setFile] = useState<File | null>(null); // New state
     
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<{type: 'success'|'error', msg: string} | null>(null);
@@ -37,18 +38,18 @@ export const TeacherAssignments: React.FC = () => {
     };
 
     const fetchRecent = async () => {
-        // Fetch raw assignments for now (since we don't have a teacher-specific getter RPC yet)
         const { data, error } = await supabase
             .from('assignments')
-            .select(`
-                id, title, due_date, class_name, 
-                subjects ( code )
-            `)
+            .select('id, title, due_date, class_name, subjects ( code )')
             .order('created_at', { ascending: false })
             .limit(10);
             
-        if (!error && data) {
-            setRecentAssignments(data);
+        if (!error && data) setRecentAssignments(data);
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setFile(e.target.files[0]);
         }
     };
 
@@ -58,12 +59,35 @@ export const TeacherAssignments: React.FC = () => {
         setStatus(null);
 
         try {
+            let fileUrl = null;
+
+            // Upload File if present
+            if (file) {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random()}.${fileExt}`;
+                const filePath = `${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('assignments')
+                    .upload(filePath, file);
+
+                if (uploadError) throw uploadError;
+
+                // Get Public URL
+                const { data: { publicUrl } } = supabase.storage
+                    .from('assignments')
+                    .getPublicUrl(filePath);
+                
+                fileUrl = publicUrl;
+            }
+
             const { error } = await supabase.rpc('create_assignment', {
                 p_title: title,
                 p_description: desc,
                 p_due_date: dueDate,
                 p_class_name: selectedClass,
-                p_subject_code: selectedSubject
+                p_subject_code: selectedSubject,
+                p_file_url: fileUrl // Updated RPC call
             });
 
             if (error) throw error;
@@ -72,7 +96,8 @@ export const TeacherAssignments: React.FC = () => {
             setTitle('');
             setDesc('');
             setDueDate('');
-            fetchRecent(); // Refresh list
+            setFile(null); // Reset file
+            fetchRecent();
         } catch (err: any) {
             console.error(err);
             setStatus({ type: 'error', msg: err.message || 'Failed to create assignment' });
@@ -155,6 +180,20 @@ export const TeacherAssignments: React.FC = () => {
                                     />
                                 </div>
 
+                                {/* File Upload */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Attachment (PDF)</label>
+                                    <div className="relative">
+                                        <input 
+                                            type="file"
+                                            accept=".pdf,.doc,.docx,.jpg,.png"
+                                            onChange={handleFileChange}
+                                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-[#4D44B5] outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#4D44B5] file:text-white hover:file:bg-[#3d3691]"
+                                        />
+                                    </div>
+                                    {file && <p className="text-xs text-green-600 mt-1 flex items-center gap-1"><Paperclip className="w-3 h-3" /> Selected: {file.name}</p>}
+                                </div>
+
                                 <div>
                                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Due Date</label>
                                     <input 
@@ -171,7 +210,8 @@ export const TeacherAssignments: React.FC = () => {
                                     disabled={loading}
                                     className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#4D44B5] text-white rounded-xl font-bold hover:bg-[#3d3691] transition-colors disabled:opacity-50"
                                 >
-                                    {loading ? 'Publishing...' : 'Publish Assignment'}
+                                    {loading ? <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div> : <UploadCloud className="w-5 h-5" />}
+                                    <span>{loading ? 'Uploading...' : 'Publish Assignment'}</span>
                                 </button>
                             </form>
                         </div>

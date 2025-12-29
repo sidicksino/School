@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '../layout/DashboardLayout';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
-import { BookOpen, Calendar, Clock, CheckCircle } from 'lucide-react';
+import { BookOpen, Calendar, Clock, CheckCircle, Download, FileText } from 'lucide-react';
 
 interface Assignment {
     id: string;
@@ -12,6 +12,7 @@ interface Assignment {
     subject_name: string;
     subject_code: string;
     is_overdue: boolean;
+    file_url?: string; // Optional file
 }
 
 export const Assignments: React.FC = () => {
@@ -55,6 +56,46 @@ export const Assignments: React.FC = () => {
     const pending = assignments.filter(a => !a.is_overdue);
     const past = assignments.filter(a => a.is_overdue);
 
+    const AssignmentCard = ({ a, isPast = false }: { a: Assignment, isPast?: boolean }) => (
+        <div className={`group relative bg-white dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600 rounded-2xl p-6 hover:shadow-md transition-all ${isPast ? 'grayscale' : ''}`}>
+            {!isPast && (
+                <div className={`absolute top-4 right-4 text-xs font-bold px-2 py-1 rounded-full ${
+                    getDaysRemaining(a.due_date) === 'Today' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
+                }`}>
+                    {getDaysRemaining(a.due_date)}
+                </div>
+            )}
+
+            <div className="mb-4">
+                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    {a.subject_name} ({a.subject_code})
+                </span>
+                <h4 className={`text-lg font-bold text-slate-800 dark:text-white mt-1 ${!isPast && 'group-hover:text-[#4D44B5]'} transition-colors`}>{a.title}</h4>
+            </div>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 line-clamp-3">
+                {a.description}
+            </p>
+
+            {a.file_url && (
+                <a 
+                    href={a.file_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-xs font-bold text-[#4D44B5] mb-4 hover:underline"
+                >
+                    <FileText className="w-4 h-4" />
+                    Download Attachment
+                </a>
+            )}
+
+            <div className="flex items-center gap-2 text-xs text-slate-400 border-t border-slate-100 dark:border-slate-600 pt-4">
+                <Calendar className="w-4 h-4" />
+                Due: {formatDate(a.due_date)}
+            </div>
+        </div>
+    );
+
     return (
         <DashboardLayout>
             <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm min-h-[80vh]">
@@ -87,31 +128,7 @@ export const Assignments: React.FC = () => {
                                 Upcoming
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {pending.map(a => (
-                                    <div key={a.id} className="group relative bg-white dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600 rounded-2xl p-6 hover:shadow-md transition-all">
-                                        <div className={`absolute top-4 right-4 text-xs font-bold px-2 py-1 rounded-full ${
-                                            getDaysRemaining(a.due_date) === 'Today' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
-                                        }`}>
-                                            {getDaysRemaining(a.due_date)}
-                                        </div>
-
-                                        <div className="mb-4">
-                                            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                                                {a.subject_name} ({a.subject_code})
-                                            </span>
-                                            <h4 className="text-lg font-bold text-slate-800 dark:text-white mt-1 group-hover:text-[#4D44B5] transition-colors">{a.title}</h4>
-                                        </div>
-
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 line-clamp-3">
-                                            {a.description}
-                                        </p>
-
-                                        <div className="flex items-center gap-2 text-xs text-slate-400 border-t border-slate-100 dark:border-slate-600 pt-4">
-                                            <Calendar className="w-4 h-4" />
-                                            Due: {formatDate(a.due_date)}
-                                        </div>
-                                    </div>
-                                ))}
+                                {pending.map(a => <AssignmentCard key={a.id} a={a} />)}
                                 {pending.length === 0 && <p className="text-slate-500 italic">No upcoming assignments.</p>}
                             </div>
                         </div>
@@ -124,20 +141,7 @@ export const Assignments: React.FC = () => {
                                     Past / Completed
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {past.map(a => (
-                                        <div key={a.id} className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-6 grayscale">
-                                            <div className="mb-2">
-                                                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                                                    {a.subject_code}
-                                                </span>
-                                                <h4 className="text-base font-bold text-slate-700 dark:text-slate-300">{a.title}</h4>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
-                                                <Calendar className="w-4 h-4" />
-                                                Due: {formatDate(a.due_date)}
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {past.map(a => <AssignmentCard key={a.id} a={a} isPast={true} />)}
                                 </div>
                             </div>
                          )}

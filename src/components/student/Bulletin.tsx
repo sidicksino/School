@@ -53,17 +53,37 @@ export const Bulletin: React.FC = () => {
 
     return (
         <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-slate-800 dark:text-white font-heading">
                         Bulletin de Notes
                     </h3>
-                    <p className="text-sm text-slate-500">Trimestre {term} • {user?.classe || 'Terminale S'}</p>
+                    <p className="text-sm text-slate-500">{user?.classe || 'Classe'} • Année 2024-2025</p>
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 bg-[#F3F4FF] text-[#4D44B5] rounded-xl font-bold text-sm hover:bg-[#E0E2FF] transition-colors">
-                    <Download className="w-4 h-4" />
-                    <span className="hidden sm:inline">Download PDF</span>
-                </button>
+
+                <div className="flex items-center gap-3">
+                    {/* Term Selector */}
+                    <div className="flex bg-slate-100 dark:bg-slate-700/50 rounded-xl p-1">
+                        {[1, 2, 3].map((t) => (
+                            <button
+                                key={t}
+                                onClick={() => setTerm(t)}
+                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                                    term === t
+                                    ? 'bg-white dark:bg-slate-600 text-[#4D44B5] shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'
+                                }`}
+                            >
+                                Trimestre {t}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button className="flex items-center gap-2 px-4 py-2 bg-[#F3F4FF] text-[#4D44B5] rounded-xl font-bold text-sm hover:bg-[#E0E2FF] transition-colors">
+                        <Download className="w-4 h-4" />
+                        <span className="hidden sm:inline">PDF</span>
+                    </button>
+                </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -84,7 +104,6 @@ export const Bulletin: React.FC = () => {
                             <tr key={row.subject_code} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                 <td className="py-4 px-2 font-medium text-slate-700 dark:text-slate-200">
                                     {row.subject_name}
-                                    <span className="block text-[10px] text-slate-400 font-normal">{row.category}</span>
                                 </td>
                                 <td className="py-4 px-2 text-center text-slate-600 dark:text-slate-400">
                                     {row.moy_devoir}

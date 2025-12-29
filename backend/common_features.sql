@@ -60,3 +60,63 @@ as $$
   order by event_date asc
   limit 5;
 $$;
+
+-- 4. RPCs to Manage Data (Admin)
+
+create or replace function manage_notice(
+  p_action text, -- 'create', 'delete'
+  p_id uuid default null,
+  p_title text default null,
+  p_content text default null,
+  p_date date default null
+)
+returns json
+language plpgsql
+security definer
+as $$
+begin
+  if p_action = 'create' then
+    insert into public.notices (title, content, date)
+    values (p_title, p_content, coalesce(p_date, current_date));
+    return json_build_object('status', 'success');
+    
+  elsif p_action = 'delete' then
+    delete from public.notices where id = p_id;
+    return json_build_object('status', 'success');
+  end if;
+  
+  return json_build_object('status', 'error', 'message', 'Invalid action');
+end;
+$$;
+
+create or replace function manage_event(
+  p_action text, -- 'create', 'delete'
+  p_id uuid default null,
+  p_title text default null,
+  p_description text default null,
+  p_event_date date default null,
+  p_location text default null,
+  p_type text default null
+)
+returns json
+language plpgsql
+security definer
+as $$
+begin
+  if p_action = 'create' then
+    insert into public.school_events (title, description, event_date, location, type)
+    values (p_title, p_description, p_event_date, p_location, p_type);
+    return json_build_object('status', 'success');
+    
+  elsif p_action = 'delete' then
+    delete from public.school_events where id = p_id;
+    return json_build_object('status', 'success');
+  end if;
+  
+  return json_build_object('status', 'error', 'message', 'Invalid action');
+end;
+$$;
+
+-- Grant permissions for management functions
+grant execute on function manage_notice(text, uuid, text, text, date) to authenticated, service_role;
+grant execute on function manage_event(text, uuid, text, text, date, text, text) to authenticated, service_role;

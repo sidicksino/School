@@ -11,6 +11,7 @@ import { TodaysSchedule } from './TodaysSchedule';
 import { UserManagement } from '../admin/UserManagement';
 import { ClassManagement } from '../admin/ClassManagement';
 import { SubjectManagement } from '../admin/SubjectManagement';
+import { CommunicationManagement } from '../admin/CommunicationManagement';
 
 // Dynamic Notice Board Component
 const NoticeBoard: React.FC = () => {
@@ -188,10 +189,16 @@ export const DashboardPage: React.FC = () => {
                                 <SubjectManagement />
                             </div>
 
-                             {/* User Management Section */}
+                            {/* User Management Section */}
                              <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-l-4 border-l-purple-500">
                                 <h3 className="font-bold text-xl text-slate-800 dark:text-white mb-6">User Management</h3>
                                 <UserManagement />
+                             </div>
+
+                             {/* Communication Management Section (Notices & Events) */}
+                             <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-l-4 border-l-teal-500">
+                                <h3 className="font-bold text-xl text-slate-800 dark:text-white mb-6">Communication Center (Notices & Events)</h3>
+                                <CommunicationManagement />
                              </div>
                         </div>
                     )}

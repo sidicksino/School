@@ -22,7 +22,7 @@ export const SubjectManagement: React.FC = () => {
 
     const fetchSubjects = async () => {
         setLoading(true);
-        const { data, error } = await supabase.from('subjects').select('*').order('name');
+        const { data, error } = await supabase.rpc('get_all_subjects');
         if (!error && data) {
             setSubjects(data);
         }

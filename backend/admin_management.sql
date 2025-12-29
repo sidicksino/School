@@ -212,6 +212,36 @@ begin
 end;
 $$;
 
+-- RPC: Get Schedule for a Class
+create or replace function get_class_schedule(p_classe text)
+returns table (
+  id uuid,
+  day_of_week text,
+  start_time text,
+  end_time text,
+  room text,
+  subject_name text,
+  subject_code text
+)
+language plpgsql
+security definer
+as $$
+begin
+  return query
+  select 
+    sc.id,
+    sc.day_of_week,
+    sc.start_time::text, -- Cast to text for consistent frontend handling
+    sc.end_time::text,
+    sc.room,
+    s.name as subject_name,
+    s.code as subject_code
+  from public.schedule sc
+  join public.subjects s on sc.subject_id = s.id
+  where sc.classe = p_classe;
+end;
+$$;
+
 
 -- =========================================================
 -- 5. CLASS MANAGEMENT
@@ -309,3 +339,19 @@ begin
   return json_build_object('error', 'Invalid action');
 end;
 $$;
+
+-- RPC: Get All Subjects
+create or replace function get_all_subjects()
+returns table (
+  id uuid,
+  name text,
+  code text
+)
+language plpgsql
+security definer
+as $$
+begin
+  return query select s.id, s.name, s.code from public.subjects s order by s.name;
+end;
+$$;
+

@@ -53,35 +53,24 @@ export const ScheduleEditor: React.FC = () => {
     }, [selectedClass]);
 
     const fetchSubjects = async () => {
-        const { data } = await supabase.from('subjects').select('*');
+        const { data } = await supabase.rpc('get_all_subjects');
         if (data) setSubjects(data);
     };
 
     const fetchSchedule = async () => {
         setLoading(true);
         try {
-            // Using existing RPC but we might need a generic one for any class
-            // Currently `get_student_schedule` works by student ID.
-            // We need a way to get schedule by Class Name.
-            // Let's just raw query the table for Admin power or define a new RPC.
-            // For now, let's look at `select * from schedule where classe = selectedClass`
-            const { data, error } = await supabase
-                .from('schedule')
-                .select(`
-                    id, day_of_week, start_time, end_time, room,
-                    subjects ( name, code )
-                `)
-                .eq('classe', selectedClass);
+            const { data, error } = await supabase.rpc('get_class_schedule', { p_classe: selectedClass });
 
             if (error) throw error;
             
-            const formatted: ScheduleSlot[] = data.map((item: any) => ({
+            const formatted: ScheduleSlot[] = (data || []).map((item: any) => ({
                 id: item.id,
                 day_of_week: item.day_of_week,
                 start_time: item.start_time.slice(0, 5), // Remove seconds
                 end_time: item.end_time.slice(0, 5),
-                subject: item.subjects.name,
-                code: item.subjects.code,
+                subject: item.subject_name,
+                code: item.subject_code,
                 room: item.room
             }));
 
@@ -205,9 +194,9 @@ export const ScheduleEditor: React.FC = () => {
                                                                 value={slot?.code || ''}
                                                                 onChange={(e) => handleCellChange(day, time, e.target.value)}
                                                             >
-                                                                <option value="">Empty</option>
+                                                                    <option value="">Empty</option>
                                                                 {subjects.map(subj => (
-                                                                    <option key={subj.id} value={subj.code}>{subj.name} ({subj.code})</option>
+                                                                    <option key={subj.id} value={subj.code}>{subj.code} - {subj.name}</option>
                                                                 ))}
                                                             </select>
                                                             {slot && (

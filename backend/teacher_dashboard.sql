@@ -53,10 +53,11 @@ as $$
 begin
   return query
   select 
-    cs.class_name,
+    c.name as class_name,
     sub.name as subject_name,
-    (select count(*) from public.students s where s.classe = cs.class_name) as student_count
+    (select count(*) from public.students s where s.classe = c.name) as student_count
   from public.class_subjects cs
+  join public.classes c on cs.class_id = c.id
   join public.subjects sub on cs.subject_id = sub.id
   where cs.teacher_id = p_teacher_id;
 end;

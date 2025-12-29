@@ -19,8 +19,19 @@ export const TeacherAttendance: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-    // Hardcoded classes for prototype (ideally fetch distinct classes or teacher's assignments)
-    const classes = ['Terminale S', 'Terminale L', 'Première S', 'Première L', '3ème'];
+    const [classes, setClasses] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchClasses = async () => {
+            const { data } = await supabase.rpc('get_teacher_classes_list', { p_teacher_id: user?.id });
+            if (data) {
+                // Map to unique class names
+                const classNames = Array.from(new Set(data.map((c: any) => c.class_name)));
+                setClasses(classNames as string[]);
+            }
+        };
+        if (user) fetchClasses();
+    }, [user]);
 
     useEffect(() => {
         if (selectedClass) {

@@ -37,7 +37,8 @@ export const Profile: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Academic Info */}
+                    {/* Academic Info - Only for Students */}
+                    {user.role === 'student' && (
                     <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm">
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                             <BookOpen className="w-5 h-5 text-[#4D44B5]" />
@@ -70,6 +71,7 @@ export const Profile: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                    )}
 
                     {/* Personal & Account Info */}
                     <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm">

@@ -16,7 +16,7 @@ begin
   return query
   select s.id, s.surname, s.full_name
   from public.students s
-  where s.classe = p_classe
+  where s.classe = p_classe AND s.role = 'student'
   order by s.surname;
 end;
 $$;

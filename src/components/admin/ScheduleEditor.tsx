@@ -36,8 +36,16 @@ export const ScheduleEditor: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    // Hardcoded classes list for now, ideally fetch specific active classes
-    const classes = ['Terminale S', 'Terminale L', 'Première S', 'Première L', 'Seconde S', 'Seconde L', '3ème'];
+    // Fetch classes dynamically
+    const [classes, setClasses] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchClasses = async () => {
+             const { data } = await supabase.rpc('get_all_classes');
+             if (data) setClasses(data.map((c: any) => c.name));
+        };
+        fetchClasses();
+    }, []);
 
     useEffect(() => {
         fetchSchedule();

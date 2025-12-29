@@ -211,3 +211,101 @@ begin
   return json_build_object('success', true);
 end;
 $$;
+
+
+-- =========================================================
+-- 5. CLASS MANAGEMENT
+-- =========================================================
+
+-- Create Classes Table
+create table if not exists public.classes (
+  id uuid primary key default uuid_generate_v4(),
+  name text unique not null,
+  created_at timestamp with time zone default now()
+);
+
+-- Seed initial classes if empty
+insert into public.classes (name)
+select n
+from unnest(array['Terminale S', 'Terminale L', 'Première S', 'Première L', 'Seconde S', 'Seconde L', '3ème']) as n
+where not exists (select 1 from public.classes where name = n);
+
+-- RPC: Get All Classes
+create or replace function get_all_classes()
+returns table (
+  id uuid,
+  name text
+)
+language plpgsql
+security definer
+as $$
+begin
+  return query select c.id, c.name from public.classes c order by c.name;
+end;
+$$;
+
+-- RPC: Manage Class (Add/Delete)
+create or replace function manage_class(
+  p_action text, -- 'create', 'delete'
+  p_name text
+)
+returns json
+language plpgsql
+security definer
+as $$
+begin
+  if p_action = 'create' then
+    if exists (select 1 from public.classes where name = p_name) then
+       return json_build_object('error', 'Class already exists');
+    end if;
+    insert into public.classes (name) values (p_name);
+    return json_build_object('success', true);
+    
+  elsif p_action = 'delete' then
+    delete from public.classes where name = p_name;
+    return json_build_object('success', true);
+  end if;
+  
+  return json_build_object('error', 'Invalid action');
+end;
+$$;
+
+
+-- =========================================================
+-- 6. SUBJECT MANAGEMENT
+-- =========================================================
+
+-- RPC: Manage Subject (Add, Edit, Delete)
+create or replace function manage_subject(
+  p_action text, -- 'create', 'update', 'delete'
+  p_id uuid default null,
+  p_name text default null,
+  p_code text default null
+)
+returns json
+language plpgsql
+security definer
+as $$
+begin
+  if p_action = 'create' then
+    if exists (select 1 from public.subjects where code = p_code) then
+       return json_build_object('error', 'Subject code already exists');
+    end if;
+    insert into public.subjects (name, code) values (p_name, p_code);
+    return json_build_object('success', true);
+    
+  elsif p_action = 'update' then
+    update public.subjects 
+    set name = coalesce(p_name, name),
+        code = coalesce(p_code, code)
+    where id = p_id;
+    return json_build_object('success', true);
+
+  elsif p_action = 'delete' then
+    delete from public.subjects where id = p_id;
+    return json_build_object('success', true);
+  end if;
+  
+  return json_build_object('error', 'Invalid action');
+end;
+$$;

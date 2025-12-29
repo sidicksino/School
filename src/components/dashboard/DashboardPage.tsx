@@ -9,6 +9,8 @@ import { GenericTable } from './GenericTable';
 import { RoleGuard } from '../auth/RoleGuard';
 import { TodaysSchedule } from './TodaysSchedule';
 import { UserManagement } from '../admin/UserManagement';
+import { ClassManagement } from '../admin/ClassManagement';
+import { SubjectManagement } from '../admin/SubjectManagement';
 
 export const DashboardPage: React.FC = () => {
     const { user } = useAuth();
@@ -87,6 +89,12 @@ export const DashboardPage: React.FC = () => {
                     {/* Admin View */}
                     {isAdmin && (
                         <div className="space-y-8">
+                            {/* Academic Management - Classes & Subjects */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <ClassManagement />
+                                <SubjectManagement />
+                            </div>
+
                              {/* User Management Section */}
                              <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-l-4 border-l-purple-500">
                                 <h3 className="font-bold text-xl text-slate-800 dark:text-white mb-6">User Management</h3>

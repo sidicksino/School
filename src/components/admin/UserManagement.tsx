@@ -47,6 +47,16 @@ export const UserManagement: React.FC = () => {
         }
     };
 
+    const [availableClasses, setAvailableClasses] = useState<{name: string}[]>([]);
+    
+    useEffect(() => {
+        const fetchClasses = async () => {
+            const { data } = await supabase.rpc('get_all_classes');
+            if (data) setAvailableClasses(data);
+        };
+        fetchClasses();
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -273,14 +283,17 @@ export const UserManagement: React.FC = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Class</label>
-                                    <input 
+                                    <select 
                                         required
-                                        type="text"
-                                        placeholder="e.g. Terminale S"
                                         className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-indigo-500"
                                         value={formData.classe}
                                         onChange={e => setFormData({...formData, classe: e.target.value})}
-                                    />
+                                    >
+                                        <option value="">Select Class</option>
+                                        {availableClasses.map(c => (
+                                            <option key={c.name} value={c.name}>{c.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone</label>

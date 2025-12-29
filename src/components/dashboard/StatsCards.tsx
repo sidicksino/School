@@ -25,6 +25,12 @@ export const StatsCards: React.FC = () => {
         total_teachers: 0,
         active_classes: 0
     });
+    const [teacherStats, setTeacherStats] = useState({
+        classes_taught: 0,
+        total_students: 0,
+        hours_week: 0,
+        pending_grades: 0
+    });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -32,6 +38,8 @@ export const StatsCards: React.FC = () => {
             fetchStudentStats();
         } else if (user?.role === UserRole.ADMIN) {
             fetchAdminStats();
+        } else if (user?.role === UserRole.TEACHER) {
+            fetchTeacherStats();
         } else {
             setLoading(false);
         }
@@ -66,13 +74,25 @@ export const StatsCards: React.FC = () => {
         }
     };
 
+    const fetchTeacherStats = async () => {
+        try {
+            const { data, error } = await supabase.rpc('get_teacher_stats', { p_teacher_id: user?.id });
+            if (error) throw error;
+            if (data) setTeacherStats(data);
+        } catch (err) {
+            console.error('Error fetching teacher stats:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const getCards = () => {
         if (user?.role === UserRole.TEACHER) {
             return [
-                { label: 'Classes Taught', value: '5', icon: School, iconBg: 'bg-indigo-500' },
-                { label: 'Total Students', value: '145', icon: Users, iconBg: 'bg-emerald-500' },
-                { label: 'Hours / Week', value: '18', icon: Clock, iconBg: 'bg-amber-500' },
-                { label: 'Pending Grades', value: '3', icon: FileText, iconBg: 'bg-rose-500' },
+                { label: 'Classes Taught', value: teacherStats.classes_taught.toString(), icon: School, iconBg: 'bg-indigo-500' },
+                { label: 'Total Students', value: teacherStats.total_students.toString(), icon: Users, iconBg: 'bg-emerald-500' },
+                { label: 'Hours / Week', value: teacherStats.hours_week.toString(), icon: Clock, iconBg: 'bg-amber-500' },
+                { label: 'Pending Grades', value: teacherStats.pending_grades.toString(), icon: FileText, iconBg: 'bg-rose-500' },
             ];
         }
 

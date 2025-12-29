@@ -12,6 +12,63 @@ import { UserManagement } from '../admin/UserManagement';
 import { ClassManagement } from '../admin/ClassManagement';
 import { SubjectManagement } from '../admin/SubjectManagement';
 
+// Helper Component for Teacher View
+const TeacherDashboardContent: React.FC<{ user: any }> = ({ user }) => {
+    const [classes, setClasses] = React.useState<any[]>([]);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const fetchClasses = async () => {
+            const { data } = await import('../../lib/supabase').then(m => m.supabase.rpc('get_teacher_classes_list', { p_teacher_id: user.id }));
+            if (data) setClasses(data);
+            setLoading(false);
+        };
+        fetchClasses();
+    }, [user]);
+
+    return (
+        <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
+                <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">My Classes</h3>
+                <div className="space-y-3">
+                    {loading ? <div className="p-4 text-center text-slate-400">Loading classes...</div> : classes.length === 0 ? (
+                        <div className="p-4 text-center text-slate-400 italic">No classes assigned.</div>
+                    ) : (
+                        classes.map((cls, idx) => (
+                            <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors cursor-pointer group">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                                        {cls.class_name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-slate-700 dark:text-slate-200">{cls.class_name} - {cls.subject_name}</p>
+                                        <p className="text-xs text-slate-500">{cls.student_count} Students</p>
+                                    </div>
+                                </div>
+                                <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Manage
+                                </button>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
+            
+            <GenericTable 
+                title="Recent Activity" 
+                data={{
+                    headers: ['Student', 'Action', 'Time', 'Status'],
+                    rows: [
+                        ['Amadou Diallo', 'Submitted Assignment', '2 mins ago', 'Pending'],
+                        ['Fatima Zara', 'Grade Updated', '1 hour ago', 'Completed'],
+                        ['Moussa Koné', 'Attendance Marked', '3 hours ago', 'Present'],
+                    ]
+                }} 
+            />
+        </div>
+    );
+};
+
 export const DashboardPage: React.FC = () => {
     const { user } = useAuth();
     const isStudent = user?.role === 'student';
@@ -49,41 +106,7 @@ export const DashboardPage: React.FC = () => {
 
                     {/* Teacher View */}
                     {isTeacher && (
-                        <div className="space-y-6">
-                            <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
-                                <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">My Classes</h3>
-                                <div className="space-y-3">
-                                    {['Terminale S - Mathematics', 'Première L - Physics', '3ème - Mathematics'].map((cls, idx) => (
-                                        <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors cursor-pointer group">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
-                                                    {cls.charAt(0)}
-                                                </div>
-                                                <div>
-                                                    <p className="font-bold text-slate-700 dark:text-slate-200">{cls}</p>
-                                                    <p className="text-xs text-slate-500">24 Students • Room 10{idx}</p>
-                                                </div>
-                                            </div>
-                                            <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                Manage
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            
-                            <GenericTable 
-                                title="Recent Activity" 
-                                data={{
-                                    headers: ['Student', 'Action', 'Time', 'Status'],
-                                    rows: [
-                                        ['Amadou Diallo', 'Submitted Assignment', '2 mins ago', 'Pending'],
-                                        ['Fatima Zara', 'Grade Updated', '1 hour ago', 'Completed'],
-                                        ['Moussa Koné', 'Attendance Marked', '3 hours ago', 'Present'],
-                                    ]
-                                }} 
-                            />
-                        </div>
+                        <TeacherDashboardContent user={user} />
                     )}
 
                     {/* Admin View */}

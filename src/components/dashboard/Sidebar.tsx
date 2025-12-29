@@ -25,8 +25,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
                 { icon: CheckSquare, label: 'Attendance', path: '/teacher/attendance' },
                 { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+                { icon: Clock, label: 'Assignments', path: '/teacher/assignments' },
                 { icon: GraduationCap, label: 'Grade Entry', path: '/teacher/grades' },
-                { icon: Settings, label: 'Settings', path: '/student/profile' },
+                { icon: User, label: 'Profile', path: '/student/profile' },
+                { icon: Settings, label: 'Settings', path: '/settings' },
             ];
             break;
         case UserRole.ADMIN:
@@ -36,7 +38,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 { icon: BookOpen, label: 'Courses', path: '/student/courses' },
                 { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
                 { icon: Clock, label: 'Schedule', path: '/student/schedule' },
-                { icon: Settings, label: 'System', path: '/admin/settings' },
+                { icon: User, label: 'Profile', path: '/student/profile' },
+                { icon: Settings, label: 'Settings', path: '/settings' },
             ];
             break;
         case UserRole.STUDENT:
@@ -46,8 +49,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 { icon: Clock, label: 'Schedule', path: '/student/schedule' },
                 { icon: BookOpen, label: 'Courses', path: '/student/courses' },
                 { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
-                { icon: BookOpen, label: 'Assignments', path: '/student/assignments' }, // Added Assignments
-                { icon: Settings, label: 'Settings', path: '/student/profile' },
+                { icon: BookOpen, label: 'Assignments', path: '/student/assignments' }, 
+                { icon: User, label: 'Profile', path: '/student/profile' },
+                { icon: Settings, label: 'Settings', path: '/settings' },
             ];
             break;
     }

@@ -36,7 +36,9 @@ import { DashboardPage } from './components/dashboard/DashboardPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { TeacherAttendancePage } from './components/teacher/TeacherAttendancePage';
 import { GradeEntry } from './components/teacher/GradeEntry';
+import { TeacherAssignments } from './components/teacher/TeacherAssignments';
 import { Assignments } from './components/student/Assignments';
+import { SettingsPage } from './components/settings/SettingsPage';
 // TeacherDashboard and AdminDashboard are no longer needed as separate routes
 
 // Wrapper component to ensure content isn't hidden behind fixed header on non-hero pages
@@ -152,6 +154,14 @@ const AppContent = () => {
                         </ProtectedRoute>
                     } 
                 />
+                <Route 
+                    path="/teacher/assignments" 
+                    element={
+                        <ProtectedRoute allowedRoles={['teacher', 'admin']}>
+                             <TeacherAssignments />
+                        </ProtectedRoute>
+                    } 
+                />
 
                 {/* Redirects for legacy routes if needed, or just let them 404/redirect */}
                 <Route path="/student/dashboard" element={<Navigate to="/dashboard" replace />} />
@@ -195,6 +205,14 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute allowedRoles={['student', 'admin']}>
                              <Assignments />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/settings" 
+                    element={
+                        <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
+                             <SettingsPage />
                         </ProtectedRoute>
                     } 
                 />

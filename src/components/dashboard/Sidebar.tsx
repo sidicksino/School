@@ -24,7 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             menuItems = [
                 { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
                 { icon: CheckSquare, label: 'Attendance', path: '/teacher/attendance' },
-                { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+                // Courses removed as per user request
                 { icon: Clock, label: 'Assignments', path: '/teacher/assignments' },
                 { icon: GraduationCap, label: 'Grade Entry', path: '/teacher/grades' },
                 { icon: User, label: 'Profile', path: '/student/profile' },

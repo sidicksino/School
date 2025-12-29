@@ -35,11 +35,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             menuItems = [
                 { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
                 { icon: CheckSquare, label: 'Attendance', path: '/teacher/attendance' },
-                { icon: BookOpen, label: 'Courses', path: '/student/courses' },
-                { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
-                { icon: Clock, label: 'Schedule', path: '/student/schedule' },
+                { icon: BookOpen, label: 'Courses', path: '/admin/courses' },
                 { icon: MessageSquare, label: 'Communication', path: '/admin/communication' },
-                { icon: User, label: 'Profile', path: '/student/profile' },
                 { icon: Settings, label: 'Settings', path: '/settings' },
             ];
             break;

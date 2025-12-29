@@ -78,7 +78,7 @@ export const SubjectManagement: React.FC = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 h-full flex flex-col">
+        <div className="h-full flex flex-col p-6">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-xl text-slate-800 dark:text-white flex items-center gap-2">
                     <BookOpen className="w-5 h-5 text-indigo-500" />

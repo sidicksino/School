@@ -16,7 +16,9 @@ begin
   return query
   select s.id, s.surname, s.full_name
   from public.students s
-  where s.classe = p_classe AND s.role = 'student'
+  where s.classe = p_classe 
+    AND (s.role = 'student' AND s.role != 'admin' OR s.role IS NULL) -- Strict student role check
+    AND s.role != 'admin' -- Explicitly exclude admin just in case
   order by s.surname;
 end;
 $$;

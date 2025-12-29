@@ -43,7 +43,9 @@ begin
     coalesce(a.status, 'Present') as status -- Default to 'Present' if no record
   from public.students s
   left join public.attendance a on s.id = a.student_id and a.date = p_date
-  where s.classe = p_classe AND s.role = 'student'
+  where s.classe = p_classe 
+    AND (s.role = 'student')
+    AND s.role != 'admin' -- Extra safety
   order by s.full_name;
 end;
 $$;

@@ -23,18 +23,28 @@ export const TeacherAttendance: React.FC = () => {
 
     useEffect(() => {
         const fetchClasses = async () => {
-             // Fallback to surname to avoiding ID mismatches
-            const { data } = await supabase.rpc('get_teacher_classes_list', { 
-                p_teacher_id: user?.id,
-                p_surname: user?.surname 
-            });
-            if (data) {
-                // Map to unique class names
-                const classNames = Array.from(new Set(data.map((c: any) => c.class_name)));
-                setClasses(classNames as string[]);
+            if (!user) return;
+
+            if (user.role === 'admin') {
+                // Admin sees ALL classes
+                const { data } = await supabase.rpc('get_all_classes');
+                if (data) {
+                    setClasses(data.map((c: any) => c.name));
+                }
+            } else {
+                // Teacher sees only assigned classes (with surname fallback)
+                const { data } = await supabase.rpc('get_teacher_classes_list', { 
+                    p_teacher_id: user.id,
+                    p_surname: user.surname 
+                });
+                if (data) {
+                    // Map to unique class names
+                    const classNames = Array.from(new Set(data.map((c: any) => c.class_name)));
+                    setClasses(classNames as string[]);
+                }
             }
         };
-        if (user) fetchClasses();
+        fetchClasses();
     }, [user]);
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock, X, CheckSquare } from 'lucide-react';
+import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock, X, CheckSquare, MessageSquare } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { UserRole } from '../../utils/rbac';
@@ -38,6 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 { icon: BookOpen, label: 'Courses', path: '/student/courses' },
                 { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
                 { icon: Clock, label: 'Schedule', path: '/student/schedule' },
+                { icon: MessageSquare, label: 'Communication', path: '/admin/communication' },
                 { icon: User, label: 'Profile', path: '/student/profile' },
                 { icon: Settings, label: 'Settings', path: '/settings' },
             ];

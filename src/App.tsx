@@ -39,6 +39,7 @@ import { GradeEntry } from './components/teacher/GradeEntry';
 import { TeacherAssignments } from './components/teacher/TeacherAssignments';
 import { Assignments } from './components/student/Assignments';
 import { SettingsPage } from './components/settings/SettingsPage';
+import { CommunicationPage } from './components/admin/CommunicationPage';
 // TeacherDashboard and AdminDashboard are no longer needed as separate routes
 
 // Wrapper component to ensure content isn't hidden behind fixed header on non-hero pages
@@ -135,6 +136,14 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
                              <DashboardPage />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/admin/communication" 
+                    element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                             <CommunicationPage />
                         </ProtectedRoute>
                     } 
                 />

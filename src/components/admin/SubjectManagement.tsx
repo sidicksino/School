@@ -92,7 +92,7 @@ export const SubjectManagement: React.FC = () => {
                 </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-2 space-y-2">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-2 max-h-[400px]">
                 {loading ? <div className="text-center text-slate-400">Loading...</div> : (
                     subjects.map(s => (
                         <div key={s.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl group hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-slate-100">

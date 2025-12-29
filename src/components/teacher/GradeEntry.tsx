@@ -12,7 +12,10 @@ interface Student {
 const TERMS = [1, 2, 3];
 const TYPES = ['devoir', 'composition'];
 
+import { useAuth } from '../../contexts/AuthContext';
+
 export const GradeEntry: React.FC = () => {
+    const { user } = useAuth();
     const [classes, setClasses] = useState<string[]>([]);
     const [subjects, setSubjects] = useState<any[]>([]);
     const [students, setStudents] = useState<Student[]>([]);
@@ -30,22 +33,51 @@ export const GradeEntry: React.FC = () => {
     const [status, setStatus] = useState<{type: 'success'|'error', msg: string} | null>(null);
 
     // 1. Fetch Initial Metadata
+    // We store raw data to map class -> subjects
+    const [assignmentsMap, setAssignmentsMap] = useState<any[]>([]);
+
     useEffect(() => {
         const fetchMeta = async () => {
-            const { data: classData } = await supabase.rpc('get_all_classes');
-            if (classData) {
-                setClasses(classData.map((c: any) => c.name));
-                if (classData.length > 0) setSelectedClass(classData[0].name);
-            }
+            if (!user) return;
             
-            const { data: subjData } = await supabase.rpc('get_all_subjects');
-            if (subjData) {
-                setSubjects(subjData);
-                if (subjData.length > 0) setSelectedSubject(subjData[0].code);
+            // Fetch valid class-subject pairs for this teacher
+            // Using surname fallback for robustness
+            const { data } = await supabase.rpc('get_teacher_classes_list', { 
+                p_teacher_id: user.id,
+                p_surname: user.surname 
+            });
+            
+            if (data) {
+                setAssignmentsMap(data);
+                
+                // unique classes
+                const uniqueClasses = Array.from(new Set(data.map((item: any) => item.class_name)));
+                setClasses(uniqueClasses as string[]);
+                
+                // Select first class if any
+                if (uniqueClasses.length > 0) {
+                    const firstClass = uniqueClasses[0] as string;
+                    setSelectedClass(firstClass);
+                }
             }
         };
-        fetchMeta();
-    }, []);
+        if (user) fetchMeta();
+    }, [user]);
+
+    // Update subjects when class changes
+    useEffect(() => {
+        if (selectedClass && assignmentsMap.length > 0) {
+            const validSubjects = assignmentsMap.filter((x: any) => x.class_name === selectedClass);
+            setSubjects(validSubjects);
+            
+            // Auto-select first subject
+            if (validSubjects.length > 0) {
+                setSelectedSubject(validSubjects[0].subject_code);
+            } else {
+                setSelectedSubject('');
+            }
+        }
+    }, [selectedClass, assignmentsMap]);
 
     // 2. Fetch Students when Class changes
     useEffect(() => {
@@ -144,7 +176,7 @@ export const GradeEntry: React.FC = () => {
                             onChange={e => setSelectedSubject(e.target.value)}
                             className="w-full px-3 py-2 bg-white dark:bg-slate-800 rounded-xl border-none shadow-sm font-bold text-slate-700 dark:text-white"
                         >
-                            {subjects.map(s => <option key={s.id} value={s.code}>{s.code} - {s.name}</option>)}
+                            {subjects.map((s: any) => <option key={s.subject_code} value={s.subject_code}>{s.subject_code} - {s.subject_name}</option>)}
                         </select>
                     </div>
 

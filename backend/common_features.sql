@@ -61,6 +61,26 @@ as $$
   limit 5;
 $$;
 
+create or replace function get_all_notices()
+returns table (id uuid, title text, content text, date date, is_active boolean)
+language sql
+security definer
+as $$
+  select id, title, content, date, is_active
+  from public.notices 
+  order by date desc;
+$$;
+
+create or replace function get_all_events()
+returns table (id uuid, title text, description text, event_date date, location text, type text)
+language sql
+security definer
+as $$
+  select id, title, description, event_date, location, type
+  from public.school_events
+  order by event_date desc;
+$$;
+
 -- 4. RPCs to Manage Data (Admin)
 
 create or replace function manage_notice(
@@ -80,6 +100,15 @@ begin
     values (p_title, p_content, coalesce(p_date, current_date));
     return json_build_object('status', 'success');
     
+  elsif p_action = 'update' then
+    update public.notices 
+    set 
+      title = coalesce(p_title, title),
+      content = coalesce(p_content, content),
+      date = coalesce(p_date, date)
+    where id = p_id;
+    return json_build_object('status', 'success');
+
   elsif p_action = 'delete' then
     delete from public.notices where id = p_id;
     return json_build_object('status', 'success');
@@ -90,7 +119,7 @@ end;
 $$;
 
 create or replace function manage_event(
-  p_action text, -- 'create', 'delete'
+  p_action text, -- 'create', 'update', 'delete'
   p_id uuid default null,
   p_title text default null,
   p_description text default null,
@@ -107,7 +136,18 @@ begin
     insert into public.school_events (title, description, event_date, location, type)
     values (p_title, p_description, p_event_date, p_location, p_type);
     return json_build_object('status', 'success');
-    
+
+  elsif p_action = 'update' then
+    update public.school_events 
+    set 
+      title = coalesce(p_title, title),
+      description = coalesce(p_description, description),
+      event_date = coalesce(p_event_date, event_date),
+      location = coalesce(p_location, location),
+      type = coalesce(p_type, type)
+    where id = p_id;
+    return json_build_object('status', 'success');
+
   elsif p_action = 'delete' then
     delete from public.school_events where id = p_id;
     return json_build_object('status', 'success');

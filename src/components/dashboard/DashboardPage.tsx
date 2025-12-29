@@ -10,6 +10,7 @@ import { RoleGuard } from '../auth/RoleGuard';
 import { TodaysSchedule } from './TodaysSchedule';
 import { UserManagement } from '../admin/UserManagement';
 import { ClassManagement } from '../admin/ClassManagement';
+import { NoticeManagement } from '../admin/NoticeManagement';
 
 // Dynamic Notice Board Component
 const NoticeBoard: React.FC = () => {
@@ -100,6 +101,31 @@ const TeacherDashboardContent: React.FC<{ user: any }> = ({ user }) => {
         fetchClasses();
     }, [user]);
 
+    const [recentAssignments, setRecentAssignments] = React.useState<any[]>([]);
+
+    React.useEffect(() => {
+        const fetchAssignments = async () => {
+             const { data } = await import('../../lib/supabase').then(m => m.supabase.rpc('get_teacher_assignments', { 
+                p_teacher_id: user.id,
+                p_surname: user.surname,
+                p_limit: 5
+            }));
+            if (data) setRecentAssignments(data);
+        };
+        fetchAssignments();
+    }, [user]);
+
+    const formatTimeAgo = (date: string) => {
+        const d = new Date(date);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now.getTime() - d.getTime()) / 1000);
+        
+        if (diffInSeconds < 60) return 'Just now';
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+        return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    };
+
     return (
         <div className="space-y-6">
             <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
@@ -129,13 +155,15 @@ const TeacherDashboardContent: React.FC<{ user: any }> = ({ user }) => {
             </div>
             
             <GenericTable 
-                title="Recent Assignments (Mock)" 
+                title="Recent Assignments" 
                 data={{
-                    headers: ['Assignment', 'Action', 'Time'],
-                    rows: [
-                        ['Algebra HW 1', 'Created', '2 hours ago'],
-                        ['Physics Lab', 'Graded (5/24)', 'Yesterday'],
-                    ]
+                    headers: ['Assignment', 'Class', 'Subject', 'Created'],
+                    rows: recentAssignments.map(a => [
+                        a.title,
+                        a.class_name,
+                        a.subject_code,
+                        formatTimeAgo(a.created_at)
+                    ])
                 }} 
             />
         </div>
@@ -193,6 +221,12 @@ export const DashboardPage: React.FC = () => {
                              <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-l-4 border-l-purple-500">
                                 <h3 className="font-bold text-xl text-slate-800 dark:text-white mb-6">User Management</h3>
                                 <UserManagement />
+                             </div>
+
+                            {/* Notices & Events Management */}
+                             <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-l-4 border-l-orange-500">
+                                <h3 className="font-bold text-xl text-slate-800 dark:text-white mb-6">Annoucements & Events</h3>
+                                <NoticeManagement />
                              </div>
                         </div>
                     )}

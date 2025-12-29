@@ -4,8 +4,11 @@ import { DashboardLayout } from '../layout/DashboardLayout';
 import { WelcomeBanner } from './WelcomeBanner';
 import { StatsCards } from './StatsCards';
 import { AttendanceChart } from './AttendanceChart';
-import { Bulletin } from '../student/Bulletin';
+import { WeeklyAttendance } from './WeeklyAttendance';
 import { GenericTable } from './GenericTable';
+import { RoleGuard } from '../auth/RoleGuard';
+import { TodaysSchedule } from './TodaysSchedule';
+import { UserManagement } from '../admin/UserManagement';
 
 export const DashboardPage: React.FC = () => {
     const { user } = useAuth();
@@ -34,48 +37,117 @@ export const DashboardPage: React.FC = () => {
                 
                 {/* Left Column (Main) */}
                 <div className="lg:col-span-2 space-y-8">
-                    {/* Student: Attendance + Bulletin */}
+                    {/* Student View */}
                     {isStudent && (
-                        <>
-                            <AttendanceChart />
-                            <Bulletin />
-                        </>
-                    )}
-
-                    {/* Teacher: Actions + Table */}
-                    {isTeacher && (
-                        <div className="bg-white p-6 rounded-3xl shadow-sm">
-                            <h3 className="font-bold text-lg mb-4">Teacher Actions</h3>
-                            <p className="text-slate-500">Select a class to enter grades.</p>
-                            {/* TODO: Add Class Selector */}
+                        <div className="space-y-8">
+                            <WeeklyAttendance />
+                            {/* Student can also have a 'Recent Grades' summary here if requested later */}
                         </div>
                     )}
 
-                    {/* Admin: Logs */}
-                    {(isTeacher || isAdmin) && (
-                         <GenericTable 
-                            title={isTeacher ? "My Scheduled Classes" : "System Logs"} 
-                            data={teachersData} 
-                        />
+                    {/* Teacher View */}
+                    {isTeacher && (
+                        <div className="space-y-6">
+                            <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
+                                <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">My Classes</h3>
+                                <div className="space-y-3">
+                                    {['Terminale S - Mathematics', 'Première L - Physics', '3ème - Mathematics'].map((cls, idx) => (
+                                        <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors cursor-pointer group">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                                                    {cls.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-slate-700 dark:text-slate-200">{cls}</p>
+                                                    <p className="text-xs text-slate-500">24 Students • Room 10{idx}</p>
+                                                </div>
+                                            </div>
+                                            <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                Manage
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <GenericTable 
+                                title="Recent Activity" 
+                                data={{
+                                    headers: ['Student', 'Action', 'Time', 'Status'],
+                                    rows: [
+                                        ['Amadou Diallo', 'Submitted Assignment', '2 mins ago', 'Pending'],
+                                        ['Fatima Zara', 'Grade Updated', '1 hour ago', 'Completed'],
+                                        ['Moussa Koné', 'Attendance Marked', '3 hours ago', 'Present'],
+                                    ]
+                                }} 
+                            />
+                        </div>
+                    )}
+
+                    {/* Admin View */}
+                    {isAdmin && (
+                        <div className="space-y-8">
+                             {/* User Management Section */}
+                             <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-l-4 border-l-purple-500">
+                                <h3 className="font-bold text-xl text-slate-800 dark:text-white mb-6">User Management</h3>
+                                <UserManagement />
+                             </div>
+                        </div>
                     )}
                 </div>
 
                 {/* Right Column (Side Widgets) */}
                 <div className="space-y-8">
-                    {/* Calendar / Notices could go here */}
-                    <div className="bg-[#4D44B5] text-white p-6 rounded-3xl">
-                        <h3 className="font-bold text-lg mb-2">Notice Board</h3>
-                        <div className="space-y-4">
-                            <div className="bg-white/10 p-3 rounded-xl">
-                                <p className="text-xs opacity-70 mb-1">Dec 25, 2024</p>
-                                <p className="text-sm font-medium">Christmas Holiday starts tomorrow!</p>
+                    {/* Notice Board */}
+                    <div className="bg-[#4D44B5] text-white p-6 rounded-3xl shadow-lg shadow-indigo-200 dark:shadow-none">
+                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                             Notice Board
+                        </h3>
+                        <div className="space-y-3">
+                            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                                <p className="text-xs text-indigo-200 mb-1">Dec 25, 2024</p>
+                                <p className="text-sm font-medium">Christmas Holiday starts tomorrow! School closed until Jan 5th.</p>
                             </div>
-                            <div className="bg-white/10 p-3 rounded-xl">
-                                <p className="text-xs opacity-70 mb-1">Jan 05, 2025</p>
-                                <p className="text-sm font-medium">Term 1 Exams Results Released.</p>
+                            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                                <p className="text-xs text-indigo-200 mb-1">Jan 05, 2025</p>
+                                <p className="text-sm font-medium">Term 1 Exams Results will be published on the portal.</p>
                             </div>
                         </div>
+                        <button className="w-full mt-4 py-2 bg-white text-[#4D44B5] rounded-xl text-sm font-bold hover:bg-indigo-50 transition-colors">
+                            View All Notices
+                        </button>
                     </div>
+
+                    {/* Quick Access / Calendar / Schedule */}
+                    {isStudent ? (
+                        <TodaysSchedule />
+                    ) : (
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
+                            <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">Upcoming Events</h3>
+                             <div className="space-y-4">
+                                <div className="flex gap-3 items-start">
+                                    <div className="bg-orange-100 text-orange-600 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
+                                        <span className="text-xs font-bold">JAN</span>
+                                        <span className="text-lg font-bold leading-none">15</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">Parent Meeting</p>
+                                        <p className="text-xs text-slate-500">10:00 AM - Main Hall</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-3 items-start">
+                                    <div className="bg-blue-100 text-blue-600 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
+                                        <span className="text-xs font-bold">FEB</span>
+                                        <span className="text-lg font-bold leading-none">01</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">Science Fair</p>
+                                        <p className="text-xs text-slate-500">All Day - Campus</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
              </div>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock, X } from 'lucide-react';
+import { LayoutDashboard, User, BookOpen, GraduationCap, Settings, LogOut, Clock, X, CheckSquare } from 'lucide-react';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { UserRole } from '../../utils/rbac';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -16,31 +17,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
     const { user } = useAuth();
 
-    let menuItems = [
-        { icon: LayoutDashboard, label: t('nav.dashboard') || 'Dashboard', path: '/student/dashboard' },
-    ];
+    let menuItems: { icon: any; label: string; path: string }[] = [];
 
-    if (user?.role === 'teacher') {
-        menuItems = [
-             { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-             { icon: BookOpen, label: 'Courses', path: '/student/courses' },
-             { icon: GraduationCap, label: 'Grade Entry', path: '/teacher/grades' },
-             { icon: Settings, label: 'Settings', path: '/student/profile' },
-        ];
-    } else if (user?.role === 'admin') {
-         menuItems = [
-             { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-             { icon: Settings, label: 'System', path: '/admin/settings' },
-        ];
-    } else {
-        // Default Student
-        menuItems = [
-            { icon: LayoutDashboard, label: t('nav.dashboard') || 'Dashboard', path: '/dashboard' },
-            { icon: Clock, label: 'Schedule', path: '/student/schedule' },
-            { icon: BookOpen, label: 'Courses', path: '/student/courses' },
-            { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
-            { icon: Settings, label: 'Settings', path: '/student/profile' },
-        ];
+    switch (user?.role) {
+        case UserRole.TEACHER:
+            menuItems = [
+                { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+                { icon: CheckSquare, label: 'Attendance', path: '/teacher/attendance' },
+                { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+                { icon: GraduationCap, label: 'Grade Entry', path: '/teacher/grades' },
+                { icon: Settings, label: 'Settings', path: '/student/profile' },
+            ];
+            break;
+        case UserRole.ADMIN:
+            menuItems = [
+                { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+                { icon: CheckSquare, label: 'Attendance', path: '/teacher/attendance' },
+                { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+                { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
+                { icon: Clock, label: 'Schedule', path: '/student/schedule' },
+                { icon: Settings, label: 'System', path: '/admin/settings' },
+            ];
+            break;
+        case UserRole.STUDENT:
+        default:
+            menuItems = [
+                { icon: LayoutDashboard, label: t('nav.dashboard') || 'Dashboard', path: '/dashboard' },
+                { icon: Clock, label: 'Schedule', path: '/student/schedule' },
+                { icon: BookOpen, label: 'Courses', path: '/student/courses' },
+                { icon: GraduationCap, label: 'Grades', path: '/student/grades' },
+                { icon: BookOpen, label: 'Assignments', path: '/student/assignments' }, // Added Assignments
+                { icon: Settings, label: 'Settings', path: '/student/profile' },
+            ];
+            break;
     }
 
     return (

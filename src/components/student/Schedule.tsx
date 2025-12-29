@@ -4,6 +4,9 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { Calendar, Clock, MapPin } from 'lucide-react';
 
+import { ScheduleEditor } from '../admin/ScheduleEditor';
+import { UserRole } from '../../utils/rbac';
+
 interface ScheduleItem {
     id: string;
     subject: string;
@@ -16,6 +19,7 @@ interface ScheduleItem {
 
 export const Schedule: React.FC = () => {
     const { user } = useAuth();
+    const isAdmin = user?.role === UserRole.ADMIN;
     const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -69,7 +73,17 @@ export const Schedule: React.FC = () => {
     return (
         <DashboardLayout>
             <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm overflow-x-auto">
-                <div className="flex justify-between items-center mb-8">
+                {isAdmin ? (
+                    <div>
+                         <h2 className="text-2xl font-bold font-heading text-slate-900 dark:text-white flex items-center gap-2 mb-8">
+                            <Clock className="w-6 h-6 text-[#4D44B5]" />
+                            Master Schedule Editor
+                        </h2>
+                        <ScheduleEditor />
+                    </div>
+                ) : (
+                    <>
+                        <div className="flex justify-between items-center mb-8">
                     <h2 className="text-2xl font-bold font-heading text-slate-900 dark:text-white flex items-center gap-2">
                         <Calendar className="w-6 h-6 text-[#4D44B5]" />
                         Weekly Schedule
@@ -136,6 +150,8 @@ export const Schedule: React.FC = () => {
                          </div>
                     </div>
                 )}
+             </>
+            )}
             </div>
         </DashboardLayout>
     );

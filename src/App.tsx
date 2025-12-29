@@ -34,6 +34,7 @@ import { RegisterPage } from './components/auth/RegisterPage';
 import { LoginPage } from './components/auth/LoginPage';
 import { DashboardPage } from './components/dashboard/DashboardPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { TeacherAttendancePage } from './components/teacher/TeacherAttendancePage';
 // TeacherDashboard and AdminDashboard are no longer needed as separate routes
 
 // Wrapper component to ensure content isn't hidden behind fixed header on non-hero pages
@@ -133,6 +134,14 @@ const AppContent = () => {
                         </ProtectedRoute>
                     } 
                 />
+                <Route 
+                    path="/teacher/attendance" 
+                    element={
+                        <ProtectedRoute allowedRoles={['teacher', 'admin']}>
+                             <TeacherAttendancePage />
+                        </ProtectedRoute>
+                    } 
+                />
 
                 {/* Redirects for legacy routes if needed, or just let them 404/redirect */}
                 <Route path="/student/dashboard" element={<Navigate to="/dashboard" replace />} />
@@ -142,7 +151,7 @@ const AppContent = () => {
                 <Route 
                     path="/student/schedule" 
                     element={
-                        <ProtectedRoute allowedRoles={['student']}>
+                        <ProtectedRoute allowedRoles={['student', 'admin']}>
                              <Schedule />
                         </ProtectedRoute>
                     } 
@@ -150,7 +159,7 @@ const AppContent = () => {
                 <Route 
                     path="/student/courses" 
                     element={
-                        <ProtectedRoute allowedRoles={['student']}>
+                        <ProtectedRoute allowedRoles={['student', 'admin']}>
                              <Courses />
                         </ProtectedRoute>
                     } 
@@ -158,7 +167,7 @@ const AppContent = () => {
                 <Route 
                     path="/student/profile" 
                     element={
-                        <ProtectedRoute allowedRoles={['student']}>
+                        <ProtectedRoute allowedRoles={['student', 'admin']}>
                              <Profile />
                         </ProtectedRoute>
                     } 
@@ -166,7 +175,7 @@ const AppContent = () => {
                 <Route 
                     path="/student/grades" 
                     element={
-                        <ProtectedRoute allowedRoles={['student']}>
+                        <ProtectedRoute allowedRoles={['student', 'admin']}>
                              <GradesPage />
                         </ProtectedRoute>
                     } 

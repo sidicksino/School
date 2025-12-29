@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { User, BookOpen, GraduationCap, FileText, AlertCircle } from 'lucide-react';
+import { User, BookOpen, GraduationCap, FileText, AlertCircle, Users, Clock, School } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import { UserRole } from '../../utils/rbac';
 
 interface StatsData {
     total_subjects: number;
@@ -18,18 +19,26 @@ export const StatsCards: React.FC = () => {
         average: 0,
         absences: 0
     });
+    const [adminStats, setAdminStats] = useState({
+        total_users: 0,
+        total_students: 0,
+        total_teachers: 0,
+        active_classes: 0
+    });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (user) {
-            fetchStats();
+        if (user?.role === UserRole.STUDENT) {
+            fetchStudentStats();
+        } else if (user?.role === UserRole.ADMIN) {
+            fetchAdminStats();
+        } else {
+            setLoading(false);
         }
     }, [user]);
 
-    const fetchStats = async () => {
+    const fetchStudentStats = async () => {
         try {
-            // Call the RPC defined in grading_schema.sql
-            // Defaulting to Term 1 for the dashboard snapshot
             const { data, error } = await supabase
                 .rpc('get_student_stats', { 
                     p_student_id: user?.id,
@@ -37,48 +46,77 @@ export const StatsCards: React.FC = () => {
                 });
 
             if (error) throw error;
-
-            if (data) {
-                setStats(data);
-            }
-
+            if (data) setStats(data);
         } catch (err) {
-            console.error('Error fetching stats:', err);
+            console.error('Error fetching student stats:', err);
         } finally {
             setLoading(false);
         }
     };
 
-    const cards = [
-        {
-            label: 'Total Subjects',
-            value: loading ? '-' : stats.total_subjects.toString(),
-            icon: BookOpen,
-            iconBg: 'bg-blue-500',
-        },
-        {
-            label: 'Total Grades',
-            value: loading ? '-' : stats.total_grades.toString(),
-            icon: FileText,
-            iconBg: 'bg-green-500',
-        },
-        {
-            label: 'Absences',
-            value: loading ? '-' : stats.absences.toString(),
-            icon: AlertCircle,
-            iconBg: 'bg-pink-500',
-        },
-        {
-            label: 'Average',
-            value: loading ? '-' : `${stats.average}/20`,
-            icon: GraduationCap,
-            iconBg: 'bg-orange-500',
-        },
-    ];
+    const fetchAdminStats = async () => {
+        try {
+            const { data, error } = await supabase.rpc('get_admin_stats');
+            if (error) throw error;
+            if (data) setAdminStats(data);
+        } catch (err) {
+            console.error('Error fetching admin stats:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getCards = () => {
+        if (user?.role === UserRole.TEACHER) {
+            return [
+                { label: 'Classes Taught', value: '5', icon: School, iconBg: 'bg-indigo-500' },
+                { label: 'Total Students', value: '145', icon: Users, iconBg: 'bg-emerald-500' },
+                { label: 'Hours / Week', value: '18', icon: Clock, iconBg: 'bg-amber-500' },
+                { label: 'Pending Grades', value: '3', icon: FileText, iconBg: 'bg-rose-500' },
+            ];
+        }
+
+        if (user?.role === UserRole.ADMIN) {
+            return [
+                { label: 'Total Users', value: loading ? '-' : adminStats.total_users.toString(), icon: Users, iconBg: 'bg-blue-600' },
+                { label: 'Total Teachers', value: loading ? '-' : adminStats.total_teachers.toString(), icon: GraduationCap, iconBg: 'bg-purple-600' },
+                { label: 'Total Students', value: loading ? '-' : adminStats.total_students.toString(), icon: BookOpen, iconBg: 'bg-green-600' },
+                { label: 'Active Classes', value: loading ? '-' : adminStats.active_classes.toString(), icon: AlertCircle, iconBg: 'bg-teal-500' },
+            ];
+        }
+
+        // Default: Student
+        return [
+            {
+                label: 'Total Subjects',
+                value: loading ? '-' : stats.total_subjects.toString(),
+                icon: BookOpen,
+                iconBg: 'bg-blue-500',
+            },
+            {
+                label: 'Total Grades',
+                value: loading ? '-' : stats.total_grades.toString(),
+                icon: FileText,
+                iconBg: 'bg-green-500',
+            },
+            {
+                label: 'Absences',
+                value: loading ? '-' : stats.absences.toString(),
+                icon: AlertCircle,
+                iconBg: 'bg-pink-500',
+            },
+            {
+                label: 'Average',
+                value: loading ? '-' : `${stats.average}/20`,
+                icon: GraduationCap,
+                iconBg: 'bg-orange-500',
+            },
+        ];
+    };
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
-            {cards.map((stat, idx) => {
+            {getCards().map((stat, idx) => {
                 const Icon = stat.icon;
                 return (
                     <div 

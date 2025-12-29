@@ -10,7 +10,6 @@ import { RoleGuard } from '../auth/RoleGuard';
 import { TodaysSchedule } from './TodaysSchedule';
 import { UserManagement } from '../admin/UserManagement';
 import { ClassManagement } from '../admin/ClassManagement';
-import { SubjectManagement } from '../admin/SubjectManagement';
 
 // Dynamic Notice Board Component
 const NoticeBoard: React.FC = () => {
@@ -182,10 +181,9 @@ export const DashboardPage: React.FC = () => {
                     {/* Admin View */}
                     {isAdmin && (
                         <div className="space-y-8">
-                            {/* Academic Management - Classes & Subjects */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            {/* Academic Management - Classes */}
+                            <div className="mb-8">
                                 <ClassManagement />
-                                <SubjectManagement />
                             </div>
 
                             {/* User Management Section */}

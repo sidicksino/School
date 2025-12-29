@@ -12,6 +12,78 @@ import { UserManagement } from '../admin/UserManagement';
 import { ClassManagement } from '../admin/ClassManagement';
 import { SubjectManagement } from '../admin/SubjectManagement';
 
+// Dynamic Notice Board Component
+const NoticeBoard: React.FC = () => {
+    const [notices, setNotices] = React.useState<any[]>([]);
+    
+    React.useEffect(() => {
+        import('../../lib/supabase').then(m => {
+            m.supabase.rpc('get_active_notices').then(({ data }) => {
+                if(data) setNotices(data);
+            });
+        });
+    }, []);
+
+    return (
+        <div className="bg-[#4D44B5] text-white p-6 rounded-3xl shadow-lg shadow-indigo-200 dark:shadow-none">
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">Notice Board</h3>
+            <div className="space-y-3">
+                {notices.map((n, idx) => (
+                    <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                        <p className="text-xs text-indigo-200 mb-1">
+                            {new Date(n.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                        <p className="text-sm font-medium">{n.title} - {n.content}</p>
+                    </div>
+                ))}
+                {notices.length === 0 && <p className="text-sm opacity-70">No active notices.</p>}
+            </div>
+            <button className="w-full mt-4 py-2 bg-white text-[#4D44B5] rounded-xl text-sm font-bold hover:bg-indigo-50 transition-colors">
+                View All Notices
+            </button>
+        </div>
+    );
+};
+
+// Dynamic Upcoming Events Component
+const UpcomingEvents: React.FC = () => {
+    const [events, setEvents] = React.useState<any[]>([]);
+    
+    React.useEffect(() => {
+        import('../../lib/supabase').then(m => {
+            m.supabase.rpc('get_upcoming_events').then(({ data }) => {
+                if(data) setEvents(data);
+            });
+        });
+    }, []);
+
+    const getMonth = (d: string) => new Date(d).toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    const getDay = (d: string) => new Date(d).getDate().toString().padStart(2, '0');
+
+    return (
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
+            <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">Upcoming Events</h3>
+            <div className="space-y-4">
+                {events.map((evt, idx) => (
+                    <div key={idx} className="flex gap-3 items-start">
+                        <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 ${
+                            idx % 2 === 0 ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'
+                        }`}>
+                            <span className="text-xs font-bold">{getMonth(evt.event_date)}</span>
+                            <span className="text-lg font-bold leading-none">{getDay(evt.event_date)}</span>
+                        </div>
+                        <div>
+                            <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">{evt.title}</p>
+                            <p className="text-xs text-slate-500">{evt.location || 'TBA'}</p>
+                        </div>
+                    </div>
+                ))}
+                {events.length === 0 && <p className="text-sm text-slate-400">No upcoming events.</p>}
+            </div>
+        </div>
+    );
+};
+
 // Helper Component for Teacher View
 const TeacherDashboardContent: React.FC<{ user: any }> = ({ user }) => {
     const [classes, setClasses] = React.useState<any[]>([]);
@@ -55,13 +127,12 @@ const TeacherDashboardContent: React.FC<{ user: any }> = ({ user }) => {
             </div>
             
             <GenericTable 
-                title="Recent Activity" 
+                title="Recent Assignments (Mock)" 
                 data={{
-                    headers: ['Student', 'Action', 'Time', 'Status'],
+                    headers: ['Assignment', 'Action', 'Time'],
                     rows: [
-                        ['Amadou Diallo', 'Submitted Assignment', '2 mins ago', 'Pending'],
-                        ['Fatima Zara', 'Grade Updated', '1 hour ago', 'Completed'],
-                        ['Moussa Koné', 'Attendance Marked', '3 hours ago', 'Present'],
+                        ['Algebra HW 1', 'Created', '2 hours ago'],
+                        ['Physics Lab', 'Graded (5/24)', 'Yesterday'],
                     ]
                 }} 
             />
@@ -100,7 +171,6 @@ export const DashboardPage: React.FC = () => {
                     {isStudent && (
                         <div className="space-y-8">
                             <WeeklyAttendance />
-                            {/* Student can also have a 'Recent Grades' summary here if requested later */}
                         </div>
                     )}
 
@@ -129,55 +199,14 @@ export const DashboardPage: React.FC = () => {
 
                 {/* Right Column (Side Widgets) */}
                 <div className="space-y-8">
-                    {/* Notice Board */}
-                    <div className="bg-[#4D44B5] text-white p-6 rounded-3xl shadow-lg shadow-indigo-200 dark:shadow-none">
-                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                             Notice Board
-                        </h3>
-                        <div className="space-y-3">
-                            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
-                                <p className="text-xs text-indigo-200 mb-1">Dec 25, 2024</p>
-                                <p className="text-sm font-medium">Christmas Holiday starts tomorrow! School closed until Jan 5th.</p>
-                            </div>
-                            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
-                                <p className="text-xs text-indigo-200 mb-1">Jan 05, 2025</p>
-                                <p className="text-sm font-medium">Term 1 Exams Results will be published on the portal.</p>
-                            </div>
-                        </div>
-                        <button className="w-full mt-4 py-2 bg-white text-[#4D44B5] rounded-xl text-sm font-bold hover:bg-indigo-50 transition-colors">
-                            View All Notices
-                        </button>
-                    </div>
+                    {/* Dynamic Notice Board */}
+                    <NoticeBoard />
 
-                    {/* Quick Access / Calendar / Schedule */}
+                    {/* Dynamic Quick Access / Calendar / Schedule */}
                     {isStudent ? (
                         <TodaysSchedule />
                     ) : (
-                        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm">
-                            <h3 className="font-bold text-lg mb-4 text-slate-800 dark:text-white">Upcoming Events</h3>
-                             <div className="space-y-4">
-                                <div className="flex gap-3 items-start">
-                                    <div className="bg-orange-100 text-orange-600 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
-                                        <span className="text-xs font-bold">JAN</span>
-                                        <span className="text-lg font-bold leading-none">15</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">Parent Meeting</p>
-                                        <p className="text-xs text-slate-500">10:00 AM - Main Hall</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 items-start">
-                                    <div className="bg-blue-100 text-blue-600 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
-                                        <span className="text-xs font-bold">FEB</span>
-                                        <span className="text-lg font-bold leading-none">01</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">Science Fair</p>
-                                        <p className="text-xs text-slate-500">All Day - Campus</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <UpcomingEvents />
                     )}
                 </div>
 

@@ -1,15 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MoreHorizontal } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const AttendanceChart: React.FC = () => {
-    // Mock data for attendance
-    const data = [
-        { day: 'Mon', present: true, height: '80%' },
-        { day: 'Tue', present: true, height: '90%' },
-        { day: 'Wed', present: false, height: '40%' },
-        { day: 'Thu', present: true, height: '85%' },
-        { day: 'Fri', present: true, height: '95%' },
-    ];
+    const { user } = useAuth();
+    const [data, setData] = useState<{ day: string; present: boolean; height: string }[]>([]);
+
+    useEffect(() => {
+        if (user) {
+            fetchStats();
+        }
+    }, [user]);
+
+    const fetchStats = async () => {
+        const { data: stats } = await supabase.rpc('get_weekly_attendance_stats', { p_student_id: user?.id });
+        if (stats) {
+            // Transform SQL data (day_name, is_present) to Chart data
+            // We reverse because the RPC returns "order by date desc" (newest first) but charts usually read left-to-right (oldest to newest)
+            const formatted = stats.reverse().map((s: any) => ({
+                day: s.day_name,
+                present: s.is_present,
+                height: s.is_present ? '90%' : '40%'
+            }));
+            setData(formatted);
+        } else {
+            // Fallback if no data yet (e.g. new student)
+            setData([
+                { day: 'Mon', present: true, height: '80%' },
+                { day: 'Tue', present: true, height: '90%' },
+                { day: 'Wed', present: true, height: '85%' },
+                { day: 'Thu', present: true, height: '70%' },
+                { day: 'Fri', present: true, height: '95%' },
+            ]);
+        }
+    };
 
     return (
         <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm h-full">
@@ -23,27 +48,31 @@ export const AttendanceChart: React.FC = () => {
             </div>
 
             <div className="flex items-end justify-between h-48 px-2 gap-4">
-                {data.map((item, idx) => (
-                    <div key={idx} className="flex flex-col items-center gap-3 w-full">
-                        <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-40 relative group">
-                            {/* Bar */}
-                            <div 
-                                style={{ height: item.height }}
-                                className={`absolute bottom-0 left-0 right-0 rounded-full transition-all duration-500 w-3 mx-auto ${
-                                    item.present 
-                                    ? 'bg-[#4D44B5]' 
-                                    : 'bg-orange-500'
-                                }`}
-                            >
-                                {/* Tooltip */}
-                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                    {item.present ? 'Present' : 'Absent'}
+                {data.length === 0 ? (
+                     <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm">No data</div>
+                ) : (
+                    data.map((item, idx) => (
+                        <div key={idx} className="flex flex-col items-center gap-3 w-full">
+                            <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-40 relative group">
+                                {/* Bar */}
+                                <div 
+                                    style={{ height: item.height }}
+                                    className={`absolute bottom-0 left-0 right-0 rounded-full transition-all duration-500 w-3 mx-auto ${
+                                        item.present 
+                                        ? 'bg-[#4D44B5]' 
+                                        : 'bg-orange-500'
+                                    }`}
+                                >
+                                    {/* Tooltip */}
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                        {item.present ? 'Present' : 'Absent'}
+                                    </div>
                                 </div>
                             </div>
+                            <span className="text-xs font-bold text-slate-400">{item.day}</span>
                         </div>
-                        <span className="text-xs font-bold text-slate-400">{item.day}</span>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
             
             <div className="flex justify-center gap-6 mt-6">

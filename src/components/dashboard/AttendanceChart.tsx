@@ -14,8 +14,9 @@ export const AttendanceChart: React.FC = () => {
     }, [user]);
 
     const fetchStats = async () => {
-        const { data: stats } = await supabase.rpc('get_weekly_attendance_stats', { p_student_id: user?.id });
-        if (stats) {
+        if (!user?.id) return;
+        const { data: stats, error } = await supabase.rpc('get_weekly_attendance_stats', { p_student_id: user.id });
+        if (stats && !error) {
             // Transform SQL data (day_name, is_present) to Chart data
             // We reverse because the RPC returns "order by date desc" (newest first) but charts usually read left-to-right (oldest to newest)
             const formatted = stats.reverse().map((s: any) => ({

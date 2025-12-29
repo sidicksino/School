@@ -65,8 +65,19 @@ export const StatsCards: React.FC = () => {
     const fetchAdminStats = async () => {
         try {
             const { data, error } = await supabase.rpc('get_admin_stats');
-            if (error) throw error;
-            if (data) setAdminStats(data);
+            if (error) {
+                console.warn('Stats fetch warning:', error);
+                return; 
+            }
+            // Ensure data has all required keys if partial
+            if (data) {
+                setAdminStats({
+                    total_users: data.total_users || 0,
+                    total_students: data.total_students || 0,
+                    total_teachers: data.total_teachers || 0,
+                    active_classes: data.active_classes || 0
+                });
+            }
         } catch (err) {
             console.error('Error fetching admin stats:', err);
         } finally {

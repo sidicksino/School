@@ -21,7 +21,7 @@ BEGIN
         u.full_name as teacher_name
     FROM class_subjects cs
     JOIN subjects s ON cs.subject_id = s.id
-    LEFT JOIN users u ON cs.teacher_id = u.id
+    LEFT JOIN students u ON cs.teacher_id = u.id
     WHERE cs.class_id = p_class_id
     ORDER BY s.name ASC;
 END;

@@ -34,6 +34,18 @@ export class ErrorBoundary extends Component<Props, State> {
             >
               Reload Page
             </button>
+            <div className="mt-4">
+                <button
+                    onClick={() => {
+                        localStorage.removeItem('sb-qjaqtjidwouyqjmnorub-auth-token'); // Clear Supabase auth
+                        localStorage.clear(); // Clear other state
+                        window.location.href = '/login';
+                    }}
+                    className="text-sm text-gray-400 hover:text-white underline"
+                >
+                    Return to Login
+                </button>
+            </div>
           </div>
         </div>
       );

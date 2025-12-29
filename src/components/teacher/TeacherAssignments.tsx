@@ -3,7 +3,10 @@ import { DashboardLayout } from '../layout/DashboardLayout';
 import { supabase } from '../../lib/supabase';
 import { BookOpen, Calendar, Save, CheckCircle, AlertCircle, Trash2, Paperclip, UploadCloud } from 'lucide-react';
 
+import { useAuth } from '../../contexts/AuthContext';
+
 export const TeacherAssignments: React.FC = () => {
+    const { user } = useAuth();
     const [classes, setClasses] = useState<string[]>([]);
     const [subjects, setSubjects] = useState<any[]>([]);
     
@@ -24,18 +27,53 @@ export const TeacherAssignments: React.FC = () => {
         fetchRecent();
     }, []);
 
+    // We store the raw assignment data to filter subjects based on class
+    const [assignmentsMap, setAssignmentsMap] = useState<any[]>([]);
+
     const fetchMeta = async () => {
-        const { data: c } = await supabase.rpc('get_all_classes');
-        if (c) {
-            setClasses(c.map((x: any) => x.name));
-            if (c.length > 0) setSelectedClass(c[0].name);
-        }
-        const { data: s } = await supabase.rpc('get_all_subjects');
-        if (s) {
-            setSubjects(s);
-            if (s.length > 0) setSelectedSubject(s[0].code);
+        if (!user?.id) return;
+        
+        // Fetch valid class-subject pairs for this teacher
+        // Fallback to surname to avoiding ID mismatches in rebuilt DBs
+        const { data } = await supabase.rpc('get_teacher_classes_list', { 
+            p_teacher_id: user.id,
+            p_surname: user.surname 
+        });
+        
+        if (data) {
+            setAssignmentsMap(data);
+            
+            // Extract unique classes
+            const uniqueClasses = Array.from(new Set(data.map((item: any) => item.class_name)));
+            setClasses(uniqueClasses as string[]);
+            
+            // Default select
+            if (uniqueClasses.length > 0) {
+                const firstClass = uniqueClasses[0] as string;
+                setSelectedClass(firstClass);
+                
+                // Set default subject for this class
+                const validSubjects = data.filter((x: any) => x.class_name === firstClass);
+                if (validSubjects.length > 0) {
+                    setSubjects(validSubjects);
+                    setSelectedSubject(validSubjects[0].subject_code);
+                }
+            }
         }
     };
+
+    // Update subjects when class changes
+    useEffect(() => {
+        if (selectedClass && assignmentsMap.length > 0) {
+            const validSubjects = assignmentsMap.filter(x => x.class_name === selectedClass);
+            setSubjects(validSubjects);
+            if (validSubjects.length > 0) {
+                setSelectedSubject(validSubjects[0].subject_code);
+            } else {
+                setSelectedSubject('');
+            }
+        }
+    }, [selectedClass, assignmentsMap]);
 
     const fetchRecent = async () => {
         const { data, error } = await supabase
@@ -152,7 +190,7 @@ export const TeacherAssignments: React.FC = () => {
                                             onChange={e => setSelectedSubject(e.target.value)}
                                             className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl"
                                         >
-                                            {subjects.map(s => <option key={s.id} value={s.code}>{s.code} - {s.name}</option>)}
+                                            {subjects.map((s: any) => <option key={s.subject_code} value={s.subject_code}>{s.subject_code} - {s.subject_name}</option>)}
                                         </select>
                                     </div>
                                 </div>

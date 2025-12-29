@@ -41,10 +41,14 @@ end;
 $$;
 
 -- 2. Get Teacher Classes List
-create or replace function get_teacher_classes_list(p_teacher_id uuid)
+create or replace function get_teacher_classes_list(
+  p_teacher_id uuid default null,
+  p_surname text default null
+)
 returns table (
   class_name text,
   subject_name text,
+  subject_code text,
   student_count bigint
 )
 language plpgsql
@@ -55,10 +59,15 @@ begin
   select 
     c.name as class_name,
     sub.name as subject_name,
+    sub.code as subject_code,
     (select count(*) from public.students s where s.classe = c.name) as student_count
   from public.class_subjects cs
   join public.classes c on cs.class_id = c.id
   join public.subjects sub on cs.subject_id = sub.id
-  where cs.teacher_id = p_teacher_id;
+  left join public.students teacher on cs.teacher_id = teacher.id
+  where 
+    (p_teacher_id is not null and cs.teacher_id = p_teacher_id)
+    OR 
+    (p_surname is not null and teacher.surname = p_surname);
 end;
 $$;

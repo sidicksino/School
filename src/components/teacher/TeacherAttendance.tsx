@@ -23,7 +23,11 @@ export const TeacherAttendance: React.FC = () => {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const { data } = await supabase.rpc('get_teacher_classes_list', { p_teacher_id: user?.id });
+             // Fallback to surname to avoiding ID mismatches
+            const { data } = await supabase.rpc('get_teacher_classes_list', { 
+                p_teacher_id: user?.id,
+                p_surname: user?.surname 
+            });
             if (data) {
                 // Map to unique class names
                 const classNames = Array.from(new Set(data.map((c: any) => c.class_name)));

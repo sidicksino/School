@@ -17,15 +17,23 @@ create unique index if not exists subjects_code_idx on public.subjects (code);
 -- This drives "Total Subjects" and weighted averages
 create table if not exists public.class_subjects (
   id uuid primary key default uuid_generate_v4(),
-  class_name text not null, -- e.g. 'Terminale S'
+  class_id uuid not null references public.classes(id),
   subject_id uuid not null references public.subjects(id),
   coefficient integer not null default 1,
   category text default 'General', -- Scientific, Literary, etc.
-  unique(class_name, subject_id)
+  unique(class_id, subject_id)
 );
 
+-- Schema Migration: Ensure category exists if table was created early
+do $$ 
+begin 
+  if not exists (select 1 from information_schema.columns where table_name = 'class_subjects' and column_name = 'category') then
+    alter table public.class_subjects add column category text default 'General';
+  end if;
+end $$;
+
 -- Ensure Unique Check for Class Subject (Robust)
-create unique index if not exists class_subjects_idx on public.class_subjects (class_name, subject_id);
+create unique index if not exists class_subjects_idx on public.class_subjects (class_id, subject_id);
 
 -- Grades Table
 -- Stores individual marks. 
@@ -78,7 +86,8 @@ declare
   cur_subjects cursor for 
     select cs.subject_id, cs.coefficient 
     from public.class_subjects cs 
-    where cs.class_name = v_classe;
+    join public.classes c on cs.class_id = c.id
+    where c.name = v_classe;
     
   v_subj_id uuid;
   v_coef integer;
@@ -102,8 +111,9 @@ begin
 
   -- 2. Total Subjects
   select count(*) into v_total_subjects 
-  from public.class_subjects 
-  where class_name = v_classe;
+  from public.class_subjects cs
+  join public.classes c on cs.class_id = c.id
+  where c.name = v_classe;
 
   -- 3. Total Grades (Count of entries for this term)
   select count(*) into v_total_grades 
@@ -244,7 +254,8 @@ begin
        limit 1) as m_comp
     from public.class_subjects cs
     join public.subjects s on cs.subject_id = s.id
-    join public.students stu on stu.classe = cs.class_name
+    join public.classes c on cs.class_id = c.id
+    join public.students stu on stu.classe = c.name
     where stu.id = p_student_id
   )
   select 
@@ -292,6 +303,9 @@ $$;
 -- 6. RPC: GET STUDENT COURSES (TRACK SPECIFIC)
 -- =========================================================
 -- Returns list of subjects for the student's specific class
+-- Drop first to clear signature potential issues
+drop function if exists get_student_courses(uuid);
+
 create or replace function get_student_courses(p_student_id uuid)
 returns table (
   id uuid,
@@ -309,39 +323,62 @@ declare
   v_has_schedule boolean;
 begin
   -- Get user's class
-  select classe into v_classe from public.students where id = p_student_id;
+  select s.classe into v_classe 
+  from public.students s
+  where s.id = p_student_id;
   
-  -- Check Strategy 1
-  select exists(select 1 from public.class_subjects where class_name = v_classe) into v_has_config;
+  -- Check Strategy 1: Join via classes table keying off class_id
+  select exists(
+      select 1 
+      from public.class_subjects cs
+      join public.classes c on cs.class_id = c.id 
+      where c.name = v_classe
+  ) into v_has_config;
   
   if v_has_config then
       return query
-      select s.id, s.name, s.code, cs.coefficient, cs.category
+      select 
+        sub.id, 
+        sub.name, 
+        sub.code, 
+        cs.coefficient, 
+        cs.category
       from public.class_subjects cs
-      join public.subjects s on cs.subject_id = s.id
-      where cs.class_name = v_classe
-      order by cs.category, s.name;
+      join public.classes cls on cs.class_id = cls.id
+      join public.subjects sub on cs.subject_id = sub.id
+      where cls.name = v_classe
+      order by cs.category, sub.name;
       return; -- Exit
   end if;
 
   -- Check Strategy 2
-  select exists(select 1 from public.schedule where classe = v_classe) into v_has_schedule;
+  select exists(select 1 from public.schedule sc where sc.classe = v_classe) into v_has_schedule;
   
   if v_has_schedule then
       return query
-      select distinct s.id, s.name, s.code, 1 as coefficient, 'General' as category
+      select distinct 
+        sub.id, 
+        sub.name, 
+        sub.code, 
+        1 as coefficient, 
+        'General' as category
       from public.schedule sc
-      join public.subjects s on sc.subject_id = s.id
+      join public.subjects sub on sc.subject_id = sub.id
       where sc.classe = v_classe
-      order by s.name;
+      order by sub.name;
       return; -- Exit
   end if;
 
   -- Strategy 3 (Fallback)
   return query
-  select s.id, s.name, s.code, 1 as coefficient, 'General' as category
-  from public.subjects s
-  order by s.name;
+  select 
+    sub.id, 
+    sub.name, 
+    sub.code, 
+    1 as coefficient, 
+    'General' as category
+  from public.subjects sub
+  order by sub.name;
 end;
 $$;
 

@@ -90,7 +90,10 @@ const TeacherDashboardContent: React.FC<{ user: any }> = ({ user }) => {
 
     React.useEffect(() => {
         const fetchClasses = async () => {
-            const { data } = await import('../../lib/supabase').then(m => m.supabase.rpc('get_teacher_classes_list', { p_teacher_id: user.id }));
+            const { data } = await import('../../lib/supabase').then(m => m.supabase.rpc('get_teacher_classes_list', { 
+                p_teacher_id: user.id,
+                p_surname: user.surname 
+            }));
             if (data) setClasses(data);
             setLoading(false);
         };

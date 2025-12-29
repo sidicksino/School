@@ -3,7 +3,11 @@
 -- ===================================================
 
 -- 1. Get Teacher Stats
-create or replace function get_teacher_stats(p_teacher_id uuid)
+-- 1. Get Teacher Stats
+create or replace function get_teacher_stats(
+  p_teacher_id uuid default null,
+  p_surname text default null
+)
 returns json
 language plpgsql
 security definer
@@ -11,31 +15,46 @@ as $$
 declare
   v_classes_count bigint;
   v_students_count bigint;
-  v_hours_week bigint; -- approximate
+  v_hours_week bigint;
 begin
-  -- Count unique classes taught by this teacher
-  select count(distinct class_name) into v_classes_count 
-  from public.class_subjects 
-  where teacher_id = p_teacher_id;
+  -- Count unique classes taught by this teacher (using flexible lookup)
+  select count(distinct c.name) into v_classes_count 
+  from public.class_subjects cs
+  join public.classes c on cs.class_id = c.id
+  left join public.students teacher on cs.teacher_id = teacher.id
+  where 
+    (p_teacher_id is not null and cs.teacher_id = p_teacher_id)
+    OR 
+    (p_surname is not null and teacher.surname = p_surname);
 
-  -- Count total students in those classes
+  -- Count total students
   select count(distinct s.id) into v_students_count
   from public.students s
-  join public.class_subjects cs on s.classe = cs.class_name
-  where cs.teacher_id = p_teacher_id;
+  join public.class_subjects cs on s.classe = (select name from public.classes where id = cs.class_id)
+  left join public.students teacher on cs.teacher_id = teacher.id
+  where 
+    (p_teacher_id is not null and cs.teacher_id = p_teacher_id)
+    OR 
+    (p_surname is not null and teacher.surname = p_surname);
 
-  -- Count hours per week from schedule
-  select count(*) * 2 -- Assuming 2 hours per slot, or calculate duration
+  -- Count hours per week
+  select count(*) * 2 
   into v_hours_week
   from public.schedule sch
-  join public.class_subjects cs on sch.subject_id = cs.subject_id and sch.classe = cs.class_name
-  where cs.teacher_id = p_teacher_id;
+  join public.subjects sub on sch.subject_id = sub.id
+  join public.class_subjects cs on cs.subject_id = sub.id 
+    and (select name from public.classes where id = cs.class_id) = sch.classe
+  left join public.students teacher on cs.teacher_id = teacher.id
+  where 
+    (p_teacher_id is not null and cs.teacher_id = p_teacher_id)
+    OR 
+    (p_surname is not null and teacher.surname = p_surname);
 
   return json_build_object(
     'classes_taught', coalesce(v_classes_count, 0),
     'total_students', coalesce(v_students_count, 0),
     'hours_week', coalesce(v_hours_week, 0),
-    'pending_grades', 0 -- Placeholder or complex query
+    'pending_grades', 0
   );
 end;
 $$;

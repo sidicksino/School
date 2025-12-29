@@ -87,7 +87,10 @@ export const StatsCards: React.FC = () => {
 
     const fetchTeacherStats = async () => {
         try {
-            const { data, error } = await supabase.rpc('get_teacher_stats', { p_teacher_id: user?.id });
+            const { data, error } = await supabase.rpc('get_teacher_stats', { 
+                p_teacher_id: user?.id,
+                p_surname: user?.surname 
+            });
             if (error) throw error;
             if (data) setTeacherStats(data);
         } catch (err) {

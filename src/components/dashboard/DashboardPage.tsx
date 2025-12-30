@@ -190,10 +190,12 @@ export const DashboardPage: React.FC = () => {
         <DashboardLayout>
              <WelcomeBanner />
              {/* Stats Row */}
-             <StatsCards />
+             <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                <StatsCards />
+             </div>
 
              {/* Main Content Grid */}
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
                 
                 {/* Left Column (Main) */}
                 <div className="lg:col-span-2 space-y-8">

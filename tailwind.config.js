@@ -25,6 +25,20 @@ export default {
           'linear-gradient(to bottom right, var(--bg-primary), var(--bg-secondary))',
         glow: 'conic-gradient(from 180deg at 50% 50%, var(--color-neon) 0deg, #fbbf24 180deg, var(--color-neon) 360deg)',
       },
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+        'fade-in': 'fadeIn 0.3s ease-out forwards',
+      },
     },
   },
   plugins: [],

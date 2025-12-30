@@ -155,7 +155,8 @@ export const StatsCards: React.FC = () => {
                 return (
                     <div 
                         key={idx} 
-                        className="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-4 text-center md:text-left"
+                        className="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-4 text-center md:text-left animate-fade-in-up"
+                        style={{ animationDelay: `${idx * 0.1}s` }}
                     >
                          <div className={`${stat.iconBg} w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white shadow-lg shrink-0`}>
                             <Icon className="w-5 h-5 md:w-6 md:h-6" />

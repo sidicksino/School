@@ -153,7 +153,7 @@ export const ScheduleEditor: React.FC = () => {
                 )}
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+            <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead className="bg-slate-50 dark:bg-slate-900/50">

@@ -16,6 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const location = useLocation();
 
     const { user } = useAuth();
+    console.log('Sidebar rendering. User:', user?.surname, 'Role:', user?.role);
 
     let menuItems: { icon: any; label: string; path: string }[] = [];
 
@@ -34,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         case UserRole.ADMIN:
             menuItems = [
                 { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+                { icon: Clock, label: 'Manage Schedule', path: '/admin/schedule' },
                 { icon: CheckSquare, label: 'Attendance', path: '/teacher/attendance' },
                 { icon: BookOpen, label: 'Courses', path: '/admin/courses' },
                 { icon: MessageSquare, label: 'Communication', path: '/admin/communication' },

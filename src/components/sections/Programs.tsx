@@ -26,20 +26,20 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, index, exploreText }
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -10 }}
-      className="group relative flex flex-col h-full p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 overflow-hidden hover:border-accent/50 transition-all duration-500 hover:shadow-[0_0_40px_rgba(251,191,36,0.1)]"
+      className="group relative flex flex-col h-full p-8 rounded-3xl bg-white/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 overflow-hidden hover:border-accent/50 transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_0_40px_rgba(251,191,36,0.1)]"
     >
       {/* Hover Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       {/* Decorative Blur Circle */}
-      <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="absolute top-6 right-6 text-muted/50 group-hover:text-accent transition-colors z-10">
         <ArrowUpRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
       </div>
 
       <div className="mb-8 relative z-10">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:scale-110 transition-transform duration-300 shadow-inner group-hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-white/10 dark:to-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-accent group-hover:scale-110 transition-transform duration-300 shadow-inner group-hover:shadow-md dark:group-hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]">
             {program.icon}
         </div>
       </div>
@@ -52,7 +52,7 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, index, exploreText }
         {program.description}
       </p>
 
-      <div className="pt-6 border-t border-white/10 flex items-center justify-between relative z-10 mt-auto">
+      <div className="pt-6 border-t border-slate-200 dark:border-white/10 flex items-center justify-between relative z-10 mt-auto">
         <span className="text-sm font-medium text-accent/90 bg-accent/10 px-4 py-1.5 rounded-full border border-accent/20">
           {program.duration}
         </span>
@@ -99,11 +99,11 @@ export const Programs: React.FC = () => {
   ];
 
   return (
-    <Section id="programs" className="bg-[#0f172a] relative overflow-hidden py-32">
+    <Section id="programs" className="bg-primary relative overflow-hidden py-32 transition-colors duration-300">
       {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0f172a] to-[#0f172a] -z-10" />
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-primary to-primary dark:from-slate-900 dark:via-[#0f172a] dark:to-[#0f172a] -z-10 opacity-50 dark:opacity-100" />
       <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-accent/5 rounded-full blur-[100px] -z-10" />
-      <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 rounded-full blur-[80px] -z-10" />
+      <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[80px] -z-10" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
